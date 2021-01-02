@@ -1,31 +1,34 @@
 package sample.rest;
 
-import sample.dto.UserCredentialsDTO;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+import sample.dto.EmployeeCredentialsDTO;
+import sample.dto.EmployeeAuthenticationResultDTO;
 
 public class AuthenticatorImpl implements Authenticator {
 
-    //TODO Do it better later
-    private final static String LOGIN = "user";
-    private final static String PASSWORD = "user";
+    private static final String AUTHENTICATION_URL = "http://localhost:8080/credentials/veryfy_employee_credensials";
+
+    private final RestTemplate restTemplate;
+
+    public AuthenticatorImpl(){
+        this.restTemplate = new RestTemplate();
+    }
 
     @Override
-    public void authenticate(UserCredentialsDTO userCredentialsDTO, AuthenticationResultHandler authenticationResultHandler) {
-        Runnable authenticationTask = createAuthenticationTask(userCredentialsDTO, authenticationResultHandler);
+    public void authenticate(EmployeeCredentialsDTO employeeCredentialsDTO,
+                             AuthenticationResultHandler authenticationResultHandler) {
+        Runnable authenticationTask = () -> processAuthentication(employeeCredentialsDTO, authenticationResultHandler);
         Thread authenticationThread = new Thread(authenticationTask);
         authenticationThread.setDaemon(true);
         authenticationThread.start();
     }
 
-    private Runnable createAuthenticationTask(UserCredentialsDTO userCredentialsDTO, AuthenticationResultHandler authenticationResultHandler) {
-        return () -> {
-            try {
-                Thread.sleep(1000);
-                boolean authenticated = LOGIN.equals(userCredentialsDTO.getLogin()) && PASSWORD.equals(userCredentialsDTO.getPassword());
-                authenticationResultHandler.handle(authenticated);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        };
+    private void processAuthentication(EmployeeCredentialsDTO employeeCredentialsDTO,
+                                       AuthenticationResultHandler authenticationResultHandler) {
+        ResponseEntity<EmployeeAuthenticationResultDTO> responseEntity =
+                restTemplate.postForEntity(AUTHENTICATION_URL, employeeCredentialsDTO, EmployeeAuthenticationResultDTO.class);
+        authenticationResultHandler.handle(responseEntity.getBody());
     }
 
 }

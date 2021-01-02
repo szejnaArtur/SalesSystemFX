@@ -1,8 +1,8 @@
 package sample.rest;
 
-import sample.dto.UserCredentialsDTO;
+import sample.dto.EmployeeCredentialsDTO;
 
 public interface Authenticator {
 
-    void authenticate(UserCredentialsDTO userCredentialsDTO, AuthenticationResultHandler authenticationResultHandler);
+    void authenticate(EmployeeCredentialsDTO employeeCredentialsDTO, AuthenticationResultHandler authenticationResultHandler);
 }

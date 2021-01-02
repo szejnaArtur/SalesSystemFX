@@ -7,7 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import sample.dto.UserCredentialsDTO;
+import sample.dto.EmployeeCredentialsDTO;
 import sample.factory.PopupFactory;
 import sample.rest.Authenticator;
 import sample.rest.AuthenticatorImpl;
@@ -57,8 +57,12 @@ public class LoginController implements Initializable {
         String login = loginTextField.getText();
         String password = passwordTestField.getText();
 
-        UserCredentialsDTO userDTO = UserCredentialsDTO.of(login, password);
-        authenticator.authenticate(userDTO, (authenticationResult) -> Platform.runLater(waitingPopup::close));
+        EmployeeCredentialsDTO userDTO = EmployeeCredentialsDTO.of(login, password);
+        authenticator.authenticate(userDTO, (authenticationResult) -> {
+            Platform.runLater(waitingPopup::close);
+            System.out.println("authenticationResult: " + authenticationResult.isAuthenticated()
+                    + ", " + authenticationResult.toString());
+        });
     }
 
     private void initializeExitButton() {
