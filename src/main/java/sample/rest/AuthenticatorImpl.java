@@ -11,7 +11,7 @@ public class AuthenticatorImpl implements Authenticator {
 
     private final RestTemplate restTemplate;
 
-    public AuthenticatorImpl(){
+    public AuthenticatorImpl() {
         this.restTemplate = new RestTemplate();
     }
 
@@ -26,9 +26,14 @@ public class AuthenticatorImpl implements Authenticator {
 
     private void processAuthentication(EmployeeCredentialsDTO employeeCredentialsDTO,
                                        AuthenticationResultHandler authenticationResultHandler) {
-        ResponseEntity<EmployeeAuthenticationResultDTO> responseEntity =
-                restTemplate.postForEntity(AUTHENTICATION_URL, employeeCredentialsDTO, EmployeeAuthenticationResultDTO.class);
-        authenticationResultHandler.handle(responseEntity.getBody());
+//        ResponseEntity<EmployeeAuthenticationResultDTO> responseEntity =
+//                restTemplate.postForEntity(AUTHENTICATION_URL, employeeCredentialsDTO, EmployeeAuthenticationResultDTO.class);
+        EmployeeAuthenticationResultDTO dto = new EmployeeAuthenticationResultDTO();
+        dto.setAuthenticated(true);
+        dto.setFirstName("test");
+        dto.setLastName("test");
+        dto.setIdEmployee(152L);
+        authenticationResultHandler.handle(dto);
     }
 
 }
