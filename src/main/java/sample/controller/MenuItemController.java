@@ -3,14 +3,22 @@ package sample.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import sample.dto.MenuItemDto;
 import sample.rest.MenuItemRestClient;
 import sample.table.MenuItemTableModel;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -18,7 +26,21 @@ import java.util.stream.Collectors;
 
 public class MenuItemController implements Initializable {
 
+    private static final String ADD_MENUITEM_FXML = "/fxml/add-menuItem.fxml";
+
     private final MenuItemRestClient menuItemRestClient;
+
+    @FXML
+    private Button addButton;
+
+    @FXML
+    private Button viewButton;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private Button deleteButton;
 
     @FXML
     private TableView<MenuItemTableModel> menuItemTableView;
@@ -29,6 +51,28 @@ public class MenuItemController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initializeAddButton();
+        initializeMenuItemTableView();
+    }
+
+    private void initializeAddButton() {
+        addButton.setOnAction((x)->{
+            Stage addMenuItemStage = new Stage();
+            addMenuItemStage.initStyle(StageStyle.UNDECORATED);
+            addMenuItemStage.initModality(Modality.APPLICATION_MODAL);
+            try {
+                Parent addMenuItemParent = FXMLLoader.load(getClass().getResource(ADD_MENUITEM_FXML));
+                Scene scene = new Scene(addMenuItemParent, 500, 450);
+                addMenuItemStage.setScene(scene);
+                addMenuItemStage.setFullScreen(true);
+                addMenuItemStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void initializeMenuItemTableView() {
         menuItemTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn nameColumn = new TableColumn("Name");

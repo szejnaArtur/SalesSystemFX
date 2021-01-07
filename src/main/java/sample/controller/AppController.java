@@ -12,6 +12,8 @@ import java.util.ResourceBundle;
 
 public class AppController implements Initializable {
 
+    private final static String MENUITEM_FXML = "/fxml/menuItem.fxml";
+
     @FXML
     private Pane menuPane;
 
@@ -24,7 +26,7 @@ public class AppController implements Initializable {
 
     private void loadView() {
         try {
-            BorderPane borderPane = FXMLLoader.load(getClass().getResource("/fxml/menuItem.fxml"));
+            BorderPane borderPane = FXMLLoader.load(getClass().getResource(MENUITEM_FXML));
             menuPane.getChildren().add(borderPane);
         } catch (IOException e) {
             e.printStackTrace();

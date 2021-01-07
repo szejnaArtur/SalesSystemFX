@@ -1,0 +1,31 @@
+.cancel-button {
+    -fx-background-color: -fx-primary-red;
+    -fx-background-radius: 0;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-alignment: center;
+}
+
+.cancel-button:hover{
+    -fx-background-color: -fx-secundary-red;
+}
+
+.save-button{
+    -fx-text-fill: -fx-primary-blue;
+    -fx-background-color: -fx-primary-gray;
+    -fx-border-color: -fx-primary-blue;
+    -fx-background-radius: 0;
+}
+
+.save-button:hover{
+    -fx-background-color: -fx-secundary-gray;
+}
+
+.text{
+    -fx-text-fill: -fx-primary-blue;
+}
+
+.title{
+    -fx-font-size: 25px;
+    -fx-text-fill: -fx-primary-blue;
+}
