@@ -15,6 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sample.dto.MenuItemDto;
+import sample.factory.PopupFactory;
 import sample.rest.MenuItemRestClient;
 import sample.table.MenuItemTableModel;
 
