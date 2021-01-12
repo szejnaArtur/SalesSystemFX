@@ -89,7 +89,6 @@ public class LoginController implements Initializable {
             appStage.setTitle(APP_TITLE);
             appStage.setScene(scene);
             appStage.show();
-            appStage.setFullScreen(true);
             getLoginStage().close();
         } catch (
                 IOException e) {

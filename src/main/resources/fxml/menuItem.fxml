@@ -27,7 +27,7 @@
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" top="10.0" />
                </HBox.margin></Button>
-            <Button mnemonicParsing="false" prefHeight="80.0" prefWidth="100.0" styleClass="login-button" text="Button">
+            <Button fx:id="refreshButton" mnemonicParsing="false" prefHeight="80.0" prefWidth="100.0" styleClass="login-button" text="Refresh">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" top="10.0" />
                </HBox.margin></Button>

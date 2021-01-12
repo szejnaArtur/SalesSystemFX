@@ -12,11 +12,13 @@ public class MenuItemDto {
     private String description;
     private String type;
 
-    public MenuItemDto(String name, Double price, Integer kcal, String type){
-        this.setName(name);
-        this.setPrice(price);
-        this.setKcal(kcal);
-        this.setType(type);
+    public static MenuItemDto of(String name, Double price, Integer kcal, String type){
+        MenuItemDto dto = new MenuItemDto();
+        dto.setName(name);
+        dto.setPrice(price);
+        dto.setKcal(kcal);
+        dto.setType(type);
+        return dto;
     }
 
 }

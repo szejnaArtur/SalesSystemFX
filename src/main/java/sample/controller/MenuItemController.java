@@ -15,7 +15,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sample.dto.MenuItemDto;
-import sample.factory.PopupFactory;
 import sample.rest.MenuItemRestClient;
 import sample.table.MenuItemTableModel;
 
@@ -31,6 +30,8 @@ public class MenuItemController implements Initializable {
 
     private final MenuItemRestClient menuItemRestClient;
 
+    private final ObservableList<MenuItemTableModel> data;
+
     @FXML
     private Button addButton;
 
@@ -44,16 +45,25 @@ public class MenuItemController implements Initializable {
     private Button deleteButton;
 
     @FXML
+    private Button refreshButton;
+
+    @FXML
     private TableView<MenuItemTableModel> menuItemTableView;
 
     public MenuItemController() {
         this.menuItemRestClient = new MenuItemRestClient();
+        this.data = FXCollections.observableArrayList();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeAddButton();
         initializeMenuItemTableView();
+        initializeRefreshButton();
+    }
+
+    private void initializeRefreshButton() {
+        refreshButton.setOnAction(x-> loadMenuItemData());
     }
 
     private void initializeAddButton() {
@@ -63,9 +73,8 @@ public class MenuItemController implements Initializable {
             addMenuItemStage.initModality(Modality.APPLICATION_MODAL);
             try {
                 Parent addMenuItemParent = FXMLLoader.load(getClass().getResource(ADD_MENUITEM_FXML));
-                Scene scene = new Scene(addMenuItemParent, 500, 450);
+                Scene scene = new Scene(addMenuItemParent, 1200, 900);
                 addMenuItemStage.setScene(scene);
-                addMenuItemStage.setFullScreen(true);
                 addMenuItemStage.show();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -94,16 +103,15 @@ public class MenuItemController implements Initializable {
 
         menuItemTableView.getColumns().addAll(nameColumn, priceColumn, kcalColumn, typeColumn);
 
-        ObservableList<MenuItemTableModel> data = FXCollections.observableArrayList();
-
-        loadMenuItemData(data);
+        loadMenuItemData();
 
         menuItemTableView.setItems(data);
     }
 
-    private void loadMenuItemData(ObservableList<MenuItemTableModel> data) {
+    private void loadMenuItemData() {
         Thread thread = new Thread(() -> {
             List<MenuItemDto> menuItems = menuItemRestClient.getMenuItems();
+            data.clear();
             data.addAll(menuItems.stream().map(MenuItemTableModel::of).collect(Collectors.toList()));
         });
         thread.start();

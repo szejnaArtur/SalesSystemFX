@@ -55,9 +55,11 @@ public class AddMenuItemController implements Initializable {
             MenuItemDto menuItemDto = createMenuItemDto();
             Stage waitingPopup = popupFactory.createWaitingPopup("Connecting to the server...");
             waitingPopup.show();
-            menuItemRestClient.saveMenuItem(menuItemDto, () ->{
+            menuItemRestClient.saveMenuItem(menuItemDto, ()->{
                 waitingPopup.close();
-
+                Stage infoPopup =
+                        popupFactory.createInfoPopup("Menu item has been saved.", () -> getStage().close());
+                infoPopup.show();
             });
         });
     }
@@ -67,7 +69,8 @@ public class AddMenuItemController implements Initializable {
         Double price = Double.valueOf(priceTextField.getText());
         Integer kcal = Integer.valueOf(kcalTextField.getText());
         String type = typeTextField.getText();
-        return new MenuItemDto(name, price, kcal, type);
+
+        return MenuItemDto.of(name, price, kcal, type);
     }
 
     private void initializeCancelButton() {
