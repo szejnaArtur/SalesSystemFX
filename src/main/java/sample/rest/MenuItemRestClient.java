@@ -14,6 +14,7 @@ public class MenuItemRestClient {
 
     private static final String GET_FINDALL_URL = "http://localhost:8080/menuItems/findAll";
     private static final String POST_ADD_URL = "http://localhost:8080/menuItems/add";
+    private static final String GET_FIND_URL = "http://localhost:8080/menuItems/find/";
 
     private final RestTemplate restTemplate;
 
@@ -32,6 +33,17 @@ public class MenuItemRestClient {
             handler.handle();
         } else {
             //TODO implement
+        }
+    }
+
+    public MenuItemDto getMenuItem(Long idMenuItem) {
+        String url = "http://localhost:8080/menuItems/find/" + idMenuItem;
+        ResponseEntity<MenuItemDto> responseEntity = restTemplate.getForEntity(url, MenuItemDto.class);
+        if(HttpStatus.OK.equals(responseEntity.getStatusCode())){
+            return responseEntity.getBody();
+        } else {
+            //TODO implement
+            throw new RuntimeException("Can't load Menu item.");
         }
     }
 }
