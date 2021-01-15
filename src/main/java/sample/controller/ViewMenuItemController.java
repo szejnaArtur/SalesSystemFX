@@ -62,6 +62,7 @@ public class ViewMenuItemController implements Initializable {
                 kcalTextField.setText(Integer.toString(dto.getKcal()));
                 typeTextField.setText(dto.getType());
                 descriptionTextField.setText(dto.getDescription());
+                handler.handle();
             });
         });
         thread.start();

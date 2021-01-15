@@ -15,6 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sample.dto.MenuItemDto;
+import sample.factory.PopupFactory;
 import sample.rest.MenuItemRestClient;
 import sample.table.MenuItemTableModel;
 
@@ -27,8 +28,10 @@ import java.util.stream.Collectors;
 public class MenuItemController implements Initializable {
 
     private static final String ADD_MENUITEM_FXML = "/fxml/add-menuItem.fxml";
+    private static final String VIEW_MENUITEM_FXML = "/fxml/view-menuItem.fxml";
 
     private final MenuItemRestClient menuItemRestClient;
+    private final PopupFactory popupFactory;
 
     private final ObservableList<MenuItemTableModel> data;
 
@@ -53,21 +56,49 @@ public class MenuItemController implements Initializable {
     public MenuItemController() {
         this.menuItemRestClient = new MenuItemRestClient();
         this.data = FXCollections.observableArrayList();
+        this.popupFactory = new PopupFactory();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeAddButton();
+        initializeViewButton();
         initializeMenuItemTableView();
         initializeRefreshButton();
     }
 
+    private void initializeViewButton() {
+        viewButton.setOnAction(x -> {
+            MenuItemTableModel menuItem = menuItemTableView.getSelectionModel().getSelectedItem();
+            if (menuItem != null) {
+                try {
+                    Stage waitingPopup = popupFactory.createWaitingPopup("Loading menu item data...");
+                    waitingPopup.show();
+                    Stage viewMenuItemStage = new Stage();
+                    viewMenuItemStage.initStyle(StageStyle.UNDECORATED);
+                    viewMenuItemStage.initModality(Modality.APPLICATION_MODAL);
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(VIEW_MENUITEM_FXML));
+                    Scene scene = new Scene(loader.load(), 1200, 900);
+                    viewMenuItemStage.setScene(scene);
+
+                    ViewMenuItemController controller = loader.getController();
+                    controller.loadMenuItemData(menuItem.getIdMenuItem(), () -> {
+                        waitingPopup.close();
+                        viewMenuItemStage.show();
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     private void initializeRefreshButton() {
-        refreshButton.setOnAction(x-> loadMenuItemData());
+        refreshButton.setOnAction(x -> loadMenuItemData());
     }
 
     private void initializeAddButton() {
-        addButton.setOnAction((x)->{
+        addButton.setOnAction((x) -> {
             Stage addMenuItemStage = new Stage();
             addMenuItemStage.initStyle(StageStyle.UNDECORATED);
             addMenuItemStage.initModality(Modality.APPLICATION_MODAL);

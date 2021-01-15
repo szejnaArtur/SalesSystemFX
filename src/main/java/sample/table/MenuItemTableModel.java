@@ -5,12 +5,14 @@ import sample.dto.MenuItemDto;
 
 public class MenuItemTableModel {
 
+    private final Long idMenuItem;
     private final SimpleStringProperty name;
     private final SimpleStringProperty price;
     private final SimpleStringProperty kcal;
     private final SimpleStringProperty type;
 
-    public MenuItemTableModel(String name, Double price, Integer kcal, String type){
+    public MenuItemTableModel(Long idMenuItem, String name, Double price, Integer kcal, String type){
+        this.idMenuItem = idMenuItem;
         this.name = new SimpleStringProperty(name);
         this.type = new SimpleStringProperty(type);
         this.price = new SimpleStringProperty(price.toString());
@@ -18,7 +20,7 @@ public class MenuItemTableModel {
     }
 
     public static MenuItemTableModel of(MenuItemDto menuItemDto){
-     return new MenuItemTableModel(menuItemDto.getName(), menuItemDto.getPrice(),
+     return new MenuItemTableModel(menuItemDto.getIdMenuItem(), menuItemDto.getName(), menuItemDto.getPrice(),
              menuItemDto.getKcal(), menuItemDto.getType());
     }
 
@@ -68,5 +70,9 @@ public class MenuItemTableModel {
 
     public void setType(String type) {
         this.type.set(type);
+    }
+
+    public Long getIdMenuItem() {
+        return idMenuItem;
     }
 }
