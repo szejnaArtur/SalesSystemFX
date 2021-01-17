@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import sample.dto.MenuItemDto;
+import sample.handler.DeletedMenuItemHandler;
 import sample.handler.SavedMenuItemHandler;
 
 import java.util.Arrays;
@@ -15,6 +16,7 @@ public class MenuItemRestClient {
     private static final String GET_FINDALL_URL = "http://localhost:8080/menuItems/findAll";
     private static final String POST_ADD_URL = "http://localhost:8080/menuItems/add";
     private static final String GET_FIND_URL = "http://localhost:8080/menuItems/find/";
+    private static final String DELETE_FIND_URL = "http://localhost:8080/menuItems/delete/";
 
     private final RestTemplate restTemplate;
 
@@ -45,5 +47,10 @@ public class MenuItemRestClient {
             //TODO implement
             throw new RuntimeException("Can't load Menu item.");
         }
+    }
+
+    public void deleteMenuItem(Long idMenuItem, DeletedMenuItemHandler handler) {
+        restTemplate.delete(DELETE_FIND_URL + idMenuItem);
+        handler.handle();
     }
 }

@@ -30,6 +30,7 @@ public class MenuItemController implements Initializable {
     private static final String ADD_MENUITEM_FXML = "/fxml/add-menuItem.fxml";
     private static final String VIEW_MENUITEM_FXML = "/fxml/view-menuItem.fxml";
     private static final String EDIT_MENUITEM_FXML = "/fxml/edit-menuItem.fxml";
+    private static final String DELETE_MENUITEM_FXML = "/fxml/delete-menuItem.fxml";
 
     private final MenuItemRestClient menuItemRestClient;
     private final PopupFactory popupFactory;
@@ -67,6 +68,26 @@ public class MenuItemController implements Initializable {
         initializeMenuItemTableView();
         initializeRefreshButton();
         initializeEditButton();
+        initializeDeleteButton();
+    }
+
+    private void initializeDeleteButton() {
+        deleteButton.setOnAction(x->{
+            MenuItemTableModel selectedMenuItem = menuItemTableView.getSelectionModel().getSelectedItem();
+            if (selectedMenuItem != null) {
+                try {
+                    Stage deleteMenuItemStage = createMenuItemCrudStage();
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(DELETE_MENUITEM_FXML));
+                    Scene scene = new Scene(loader.load(), 400, 240);
+                    deleteMenuItemStage.setScene(scene);
+                    DeleteMenuItemController controller = loader.getController();
+                    controller.loadMenuItemData(selectedMenuItem);
+                    deleteMenuItemStage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void initializeEditButton() {
@@ -76,7 +97,7 @@ public class MenuItemController implements Initializable {
                 try {
                     Stage waitingPopup = popupFactory.createWaitingPopup("Loading manu item data...");
                     waitingPopup.show();
-                    Stage editMenuItemStage = createEditMenuItemStage();
+                    Stage editMenuItemStage = createMenuItemCrudStage();
                     FXMLLoader loader = new FXMLLoader(getClass().getResource(EDIT_MENUITEM_FXML));
                     Scene scene = new Scene(loader.load(), 1200, 900);
                     editMenuItemStage.setScene(scene);
@@ -92,7 +113,7 @@ public class MenuItemController implements Initializable {
         });
     }
 
-    private Stage createEditMenuItemStage() {
+    private Stage createMenuItemCrudStage() {
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNDECORATED);
         stage.initModality(Modality.APPLICATION_MODAL);
