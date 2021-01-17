@@ -29,6 +29,7 @@ public class MenuItemController implements Initializable {
 
     private static final String ADD_MENUITEM_FXML = "/fxml/add-menuItem.fxml";
     private static final String VIEW_MENUITEM_FXML = "/fxml/view-menuItem.fxml";
+    private static final String EDIT_MENUITEM_FXML = "/fxml/edit-menuItem.fxml";
 
     private final MenuItemRestClient menuItemRestClient;
     private final PopupFactory popupFactory;
@@ -65,6 +66,37 @@ public class MenuItemController implements Initializable {
         initializeViewButton();
         initializeMenuItemTableView();
         initializeRefreshButton();
+        initializeEditButton();
+    }
+
+    private void initializeEditButton() {
+        editButton.setOnAction(x -> {
+            MenuItemTableModel selectedMenuItem = menuItemTableView.getSelectionModel().getSelectedItem();
+            if (selectedMenuItem != null) {
+                try {
+                    Stage waitingPopup = popupFactory.createWaitingPopup("Loading manu item data...");
+                    waitingPopup.show();
+                    Stage editMenuItemStage = createEditMenuItemStage();
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(EDIT_MENUITEM_FXML));
+                    Scene scene = new Scene(loader.load(), 1200, 900);
+                    editMenuItemStage.setScene(scene);
+                    EditMenuItemController controller = loader.getController();
+                    controller.loadMenuItemData(selectedMenuItem.getIdMenuItem(), ()->{
+                        waitingPopup.close();
+                        editMenuItemStage.show();
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private Stage createEditMenuItemStage() {
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        return stage;
     }
 
     private void initializeViewButton() {

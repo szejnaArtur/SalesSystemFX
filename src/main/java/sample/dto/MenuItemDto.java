@@ -21,4 +21,14 @@ public class MenuItemDto {
         return dto;
     }
 
+    public static MenuItemDto of(String name, Double price, Integer kcal, String type, String description){
+        MenuItemDto dto = new MenuItemDto();
+        dto.setName(name);
+        dto.setPrice(price);
+        dto.setKcal(kcal);
+        dto.setType(type);
+        dto.setDescription(description);
+        return dto;
+    }
+
 }
