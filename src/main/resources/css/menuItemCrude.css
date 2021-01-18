@@ -29,3 +29,59 @@
     -fx-font-size: 25px;
     -fx-text-fill: -fx-primary-blue;
 }
+
+.purple-button{
+    -fx-text-fill: black;
+    -fx-background-color: #E369AF;
+    -fx-border-color: -fx-primary-blue;
+    -fx-background-radius: 0;
+    -fx-font-size: 25px;
+}
+
+.dark-green-button{
+    -fx-text-fill: white;
+    -fx-background-color: #12530B;
+    -fx-border-color: -fx-primary-blue;
+    -fx-background-radius: 0;
+    -fx-font-size: 25px;
+}
+
+.light-green-button{
+    -fx-text-fill: black;
+    -fx-background-color: #37D126;
+    -fx-border-color: -fx-primary-blue;
+    -fx-background-radius: 0;
+    -fx-font-size: 25px;
+}
+
+.yellow-button{
+    -fx-text-fill: black;
+    -fx-background-color: #D9EF16;
+    -fx-border-color: -fx-primary-blue;
+    -fx-background-radius: 0;
+    -fx-font-size: 25px;
+}
+
+.blue-button{
+    -fx-text-fill: white;
+    -fx-background-color: #131C57;
+    -fx-border-color: -fx-primary-blue;
+    -fx-background-radius: 0;
+    -fx-font-size: 25px;
+}
+
+.background-yellow{
+    -fx-background-color: #D9EF16;
+}
+
+.background-black{
+    -fx-background-color: #0C0C0B;
+}
+
+.background-white{
+    -fx-background-color: #EFEFE3;
+}
+
+.background-blue{
+    -fx-background-color: #5FDBE1;
+}
