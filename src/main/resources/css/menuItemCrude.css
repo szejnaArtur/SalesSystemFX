@@ -38,6 +38,14 @@
     -fx-font-size: 25px;
 }
 
+.purple-button:hover{
+    -fx-text-fill: black;
+    -fx-background-color: #B258AE;
+    -fx-border-color: -fx-primary-blue;
+    -fx-background-radius: 0;
+    -fx-font-size: 25px;
+}
+
 .dark-green-button{
     -fx-text-fill: white;
     -fx-background-color: #12530B;

@@ -10,7 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import sample.dto.EmployeeCredentialsDTO;
+import sample.dto.UserCredentialsDTO;
 import sample.factory.PopupFactory;
 import sample.rest.Authenticator;
 import sample.rest.AuthenticatorImpl;
@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
-    private static final String APP_FXML = "/fxml/app.fxml";
+    private static final String STARTPANEL_FXML = "/fxml/startPanel.fxml";
     private static final String APP_TITLE = "Restaurant sales system";
 
     private final PopupFactory popupFactory;
@@ -64,7 +64,7 @@ public class LoginController implements Initializable {
         String login = loginTextField.getText();
         String password = passwordTestField.getText();
 
-        EmployeeCredentialsDTO userDTO = EmployeeCredentialsDTO.of(login, password);
+        UserCredentialsDTO userDTO = UserCredentialsDTO.of(login, password);
         authenticator.authenticate(userDTO,
                 (authenticationResult) -> Platform.runLater(()->{
                     waitingPopup.close();
@@ -83,17 +83,17 @@ public class LoginController implements Initializable {
 
     private void openAppAndCloseLoginStage() {
         try {
-            Stage appStage = new Stage();
-            Parent appRoot = FXMLLoader.load(getClass().getResource(APP_FXML));
-            Scene scene = new Scene(appRoot, 1920, 1080);
-            appStage.setTitle(APP_TITLE);
-            appStage.setScene(scene);
-            appStage.show();
+            Stage startPanelStage = new Stage();
+            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(STARTPANEL_FXML));
+            Scene scene = new Scene(startPanelRoot, 1920, 1000);
+            startPanelStage.setTitle(APP_TITLE);
+            startPanelStage.setFullScreen(true);
+            startPanelStage.setScene(scene);
+            startPanelStage.show();
             getLoginStage().close();
         } catch (
                 IOException e) {
             e.printStackTrace();
-            System.out.println("3");
         }
     }
 

@@ -3,11 +3,12 @@ package sample.dto;
 import lombok.Data;
 
 @Data
-public class EmployeeAuthenticationResultDTO {
+public class EmployeeDTO {
 
     private Long idEmployee;
     private String firstName;
     private String lastName;
+    private String PIN;
     private boolean authenticated;
 
 }

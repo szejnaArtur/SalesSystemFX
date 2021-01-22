@@ -1,9 +1,9 @@
 package sample.handler;
 
-import sample.dto.EmployeeAuthenticationResultDTO;
+import sample.dto.UserAuthenticationResultDTO;
 
 @FunctionalInterface
 public interface AuthenticationResultHandler {
 
-    void handle(EmployeeAuthenticationResultDTO employeeAuthenticationResultDTO);
+    void handle(UserAuthenticationResultDTO userAuthenticationResultDTO);
 }

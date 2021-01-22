@@ -3,14 +3,14 @@ package sample.dto;
 import lombok.Data;
 
 @Data
-public class EmployeeCredentialsDTO {
+public class UserCredentialsDTO {
 
     private String login;
     private String password;
 
 
-    public static EmployeeCredentialsDTO of(String login, String password){
-        EmployeeCredentialsDTO dto = new EmployeeCredentialsDTO();
+    public static UserCredentialsDTO of(String login, String password){
+        UserCredentialsDTO dto = new UserCredentialsDTO();
         dto.setLogin(login);
         dto.setPassword(password);
         return dto;

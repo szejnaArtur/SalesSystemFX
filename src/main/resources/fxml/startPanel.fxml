@@ -11,8 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1060.0" prefWidth="1920.0" styleClass="background-black" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1920.0" styleClass="background-black" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.StartPanelController">
    <children>
       <HBox prefHeight="1060.0" prefWidth="1920.0">
          <children>
@@ -31,7 +30,7 @@
                      <children>
                         <VBox prefHeight="460.0" prefWidth="350.0">
                            <children>
-                              <Button fx:id="TimeButton" lineSpacing="10.0" mnemonicParsing="false" prefHeight="140.0" prefWidth="330.0" styleClass="purple-button" text="TIME">
+                              <Button fx:id="timeButton" lineSpacing="10.0" mnemonicParsing="false" prefHeight="140.0" prefWidth="330.0" styleClass="purple-button" text="TIME">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="10.0" right="5.0" top="10.0" />
                                  </VBox.margin>
