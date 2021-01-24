@@ -54,7 +54,7 @@
                                     <Insets bottom="5.0" left="5.0" right="10.0" top="10.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button fx:id="onOffButton" mnemonicParsing="false" prefHeight="140.0" prefWidth="330.0" styleClass="yellow-button" text="OPEN/ CLOSE">
+                              <Button fx:id="onOffButton" mnemonicParsing="false" prefHeight="140.0" prefWidth="330.0" styleClass="yellow-button" text="LOGOUT">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
                                  </VBox.margin>
