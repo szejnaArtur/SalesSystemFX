@@ -3,13 +3,13 @@ package sample.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.stage.Modality;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import sample.dto.EmployeeDTO;
 import sample.rest.EmployeeRestClient;
 
@@ -21,12 +21,19 @@ import java.util.ResourceBundle;
 
 public class StartPanelController implements Initializable {
 
-    private static final String APP_FXML = "/fxml/app.fxml";
+    private static final String RESTAURANT_PANEL_FXML = "/fxml/restaurantPanel.fxml";
+    private static final String APP_TITLE = "POS Restaurant System";
 
     private final EmployeeRestClient employeeRestClient;
     private EmployeeDTO employeeDTO;
 
     private String userPIN = "";
+
+    @FXML
+    private Pane startPanelPane;
+
+    @FXML
+    private Label PINLabel;
 
     @FXML
     private Button timeButton;
@@ -120,27 +127,33 @@ public class StartPanelController implements Initializable {
     }
 
     private void initializeOkButton() {
-        okButton.setOnAction(x -> {
-            employeeDTO = employeeRestClient.getEmployeeByPIN(userPIN);
-            userPIN = "";
+        okButton.setOnAction(x -> employeeAuthorization());
+    }
 
-            if(employeeDTO.isAuthenticated()){
-                try {
-                    Stage stage = new Stage();
-                    stage.initStyle(StageStyle.UNDECORATED);
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(APP_FXML));
-                    Scene scene = new Scene(loader.load(), 1920, 1020);
-                    stage.setScene(scene);
-                    stage.setFullScreen(true);
-                    stage.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                nameLabel.setText("Employee not found");
-            }
-        });
+    private void employeeAuthorization() {
+        employeeDTO = employeeRestClient.getEmployeeByPIN(userPIN);
+        userPIN = "";
+
+        if (employeeDTO.isAuthenticated()) {
+            openRestaurantPanelAndCloseStartPanel();
+        } else {
+            nameLabel.setText("Employee not found");
+        }
+    }
+
+    private void openRestaurantPanelAndCloseStartPanel() {
+        try {
+            Stage startPanelStage = new Stage();
+            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(RESTAURANT_PANEL_FXML));
+            Scene scene = new Scene(startPanelRoot, 1920, 1000);
+            startPanelStage.setTitle(APP_TITLE);
+            startPanelStage.setFullScreen(true);
+            startPanelStage.setScene(scene);
+            startPanelStage.show();
+            getStage().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initializeClearButton() {
@@ -185,6 +198,10 @@ public class StartPanelController implements Initializable {
 
     private void initializeNineButton() {
         nineButton.setOnAction(x -> userPIN += "9");
+    }
+
+    private Stage getStage() {
+        return (Stage) startPanelPane.getScene().getWindow();
     }
 
 

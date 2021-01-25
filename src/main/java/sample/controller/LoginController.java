@@ -21,8 +21,8 @@ import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
-    private static final String STARTPANEL_FXML = "/fxml/startPanel.fxml";
-    private static final String APP_TITLE = "Restaurant sales system";
+    private static final String START_PANEL_FXML = "/fxml/startPanel.fxml";
+    private static final String APP_TITLE = "POS Restaurant System";
 
     private final PopupFactory popupFactory;
     private final Authenticator authenticator;
@@ -66,10 +66,10 @@ public class LoginController implements Initializable {
 
         UserCredentialsDTO userDTO = UserCredentialsDTO.of(login, password);
         authenticator.authenticate(userDTO,
-                (authenticationResult) -> Platform.runLater(()->{
+                (authenticationResult) -> Platform.runLater(() -> {
                     waitingPopup.close();
                     if (authenticationResult.isAuthenticated()) {
-                        openAppAndCloseLoginStage();
+                        openStartPanelAndCloseLoginStage();
                     } else {
                         showIncorrectCredentialsMessage();
                     }
@@ -81,27 +81,26 @@ public class LoginController implements Initializable {
         System.out.println("Incorrect credentials");
     }
 
-    private void openAppAndCloseLoginStage() {
+    private void openStartPanelAndCloseLoginStage() {
         try {
             Stage startPanelStage = new Stage();
-            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(STARTPANEL_FXML));
+            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(START_PANEL_FXML));
             Scene scene = new Scene(startPanelRoot, 1920, 1000);
             startPanelStage.setTitle(APP_TITLE);
             startPanelStage.setFullScreen(true);
             startPanelStage.setScene(scene);
             startPanelStage.show();
-            getLoginStage().close();
-        } catch (
-                IOException e) {
+            getStage().close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void initializeExitButton() {
-        exitButton.setOnAction(x -> getLoginStage().close());
+        exitButton.setOnAction(x -> getStage().close());
     }
 
-    private Stage getLoginStage() {
+    private Stage getStage() {
         return (Stage) loginAnchorPane.getScene().getWindow();
     }
 }
