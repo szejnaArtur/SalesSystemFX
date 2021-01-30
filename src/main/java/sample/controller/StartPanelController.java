@@ -9,7 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import sample.dto.EmployeeDTO;
 import sample.rest.EmployeeRestClient;
 
@@ -22,6 +24,7 @@ import java.util.ResourceBundle;
 public class StartPanelController implements Initializable {
 
     private static final String RESTAURANT_PANEL_FXML = "/fxml/restaurantPanel.fxml";
+    private static final String LOG_PANEL_FXML = "/fxml/logPanel.fxml";
     private static final String APP_TITLE = "POS Restaurant System";
 
     private final EmployeeRestClient employeeRestClient;
@@ -45,10 +48,7 @@ public class StartPanelController implements Initializable {
     private Button availableButton;
 
     @FXML
-    private Button logoutButton;
-
-    @FXML
-    private Button onOffButton;
+    private Button logButton;
 
     @FXML
     private Button notAvailableButton;
@@ -115,6 +115,11 @@ public class StartPanelController implements Initializable {
         initializeClearButton();
         initializeOkButton();
         initializeTimeButton();
+        initializeLogButton();
+    }
+
+    private void initializeLogButton() {
+        logButton.setOnAction(x -> openLogPanel());
     }
 
     private void initializeTimeButton() {
@@ -151,6 +156,20 @@ public class StartPanelController implements Initializable {
             startPanelStage.setScene(scene);
             startPanelStage.show();
             getStage().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openLogPanel() {
+        try {
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(StartPanelController.LOG_PANEL_FXML));
+            Scene scene = new Scene(loader.load(), 400, 620);
+            stage.setScene(scene);
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }

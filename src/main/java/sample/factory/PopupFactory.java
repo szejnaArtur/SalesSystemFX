@@ -5,11 +5,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import sample.handler.InfoPopupOkHandler;
+import sample.handler.InfoPopupButtonHandler;
 
 public class PopupFactory {
 
@@ -40,6 +41,17 @@ public class PopupFactory {
         pane.setSpacing(10);
         pane.setStyle(waitingPopupPaneStyle());
         pane.getChildren().addAll(label, button);
+        return pane;
+    }
+
+    private VBox createVBox(Label label, Button yesButton, Button noButton){
+        VBox pane = new VBox();
+        pane.setAlignment(Pos.CENTER);
+        pane.setSpacing(10);
+        pane.setStyle(waitingPopupPaneStyle());
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(yesButton, noButton);
+        pane.getChildren().addAll(label, hBox);
         return pane;
     }
 
@@ -76,18 +88,40 @@ public class PopupFactory {
                 "}";
     }
 
-    public Stage createInfoPopup(String text, InfoPopupOkHandler handler) {
+    public Stage createInfoPopup(String text, InfoPopupButtonHandler handler) {
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNDECORATED);
 
-        stage.setScene(new Scene(createVBox(createLabel(text), getButton(handler, stage)), 200, 100));
+        stage.setScene(new Scene(createVBox(createLabel(text), getButton(handler, "Ok", stage)), 300, 100));
         stage.initModality(Modality.APPLICATION_MODAL);
 
         return stage;
     }
 
-    private Button getButton(InfoPopupOkHandler handler, Stage stage) {
-        Button okButton = new Button("OK");
+    public Stage createInfoPopup(String text) {
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+
+        stage.setScene(new Scene(createVBox(createLabel(text), getButton("Ok", stage)), 300, 100));
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        return stage;
+    }
+
+    public Stage createInfoPopupWithTwoButtons(String text, InfoPopupButtonHandler yesHandler, InfoPopupButtonHandler noHandler) {
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+
+        stage.setScene(new Scene(createVBox(
+                createLabel(text), getButton(yesHandler, "Yes", stage),
+                getButton(noHandler, "No", stage)), 300, 100));
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        return stage;
+    }
+
+    private Button getButton(InfoPopupButtonHandler handler, String text, Stage stage) {
+        Button okButton = new Button(text);
         okButton.setStyle(okButtonStyle());
         okButton.setOnMouseEntered(x-> okButton.setStyle(okButtonHoverStyle()));
         okButton.setOnMouseExited(x-> okButton.setStyle(okButtonStyle()));
@@ -96,5 +130,14 @@ public class PopupFactory {
             handler.handle();
         });
         return okButton;
+    }
+
+    private Button getButton(String text, Stage stage) {
+        Button button = new Button(text);
+        button.setStyle(okButtonStyle());
+        button.setOnMouseEntered(x-> button.setStyle(okButtonHoverStyle()));
+        button.setOnMouseExited(x-> button.setStyle(okButtonStyle()));
+        button.setOnAction(x-> stage.close());
+        return button;
     }
 }

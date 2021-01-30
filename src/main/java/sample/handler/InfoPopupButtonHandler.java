@@ -1,7 +1,7 @@
 package sample.handler;
 
 @FunctionalInterface
-public interface InfoPopupOkHandler {
+public interface InfoPopupButtonHandler {
 
     void handle();
 

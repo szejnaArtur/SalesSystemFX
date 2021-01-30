@@ -21,8 +21,7 @@ public class EmployeeRestClient {
         if (HttpStatus.OK.equals(responseEntity.getStatusCode())) {
             return responseEntity.getBody();
         } else{
-            //TODO implement
-            throw new RuntimeException("Can't load Employee.");
+            return new EmployeeDTO();
         }
     }
 

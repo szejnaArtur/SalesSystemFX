@@ -15,9 +15,13 @@ import java.util.ResourceBundle;
 public class RestaurantPanelController implements Initializable {
 
     private static final String APP_FXML = "/fxml/app.fxml";
+    private static final String STARTPANEL_FXML = "/fxml/startPanel.fxml";
 
     @FXML
     private Pane restaurantPanelPane;
+
+    @FXML
+    private Button logoutButton;
 
     @FXML
     private Button orderButton;
@@ -25,21 +29,29 @@ public class RestaurantPanelController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeOrderButton();
+        initializeLogoutButton();
+    }
+
+    private void initializeLogoutButton() {
+        logoutButton.setOnAction(x -> {
+            openAppCloseStage(STARTPANEL_FXML, getStage());
+            getStage().close();
+        });
     }
 
     private void initializeOrderButton() {
-        orderButton.setOnAction(x -> openAppAndCloseRestaurantPanel());
+        orderButton.setOnAction(x -> openAppCloseStage(APP_FXML, getStage()));
     }
 
-    private void openAppAndCloseRestaurantPanel(){
+    private void openAppCloseStage(String FXML_URL, Stage closeStage) {
         try {
             Stage stage = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(APP_FXML));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_URL));
             Scene scene = new Scene(loader.load(), 1920, 1020);
             stage.setScene(scene);
             stage.setFullScreen(true);
             stage.show();
-            getStage().close();
+            closeStage.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
