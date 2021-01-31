@@ -115,7 +115,6 @@ public class LogPanelController implements Initializable {
                         loginTextField.setText("");
                         password = "";
                         infoPopupWithTwoButtons.show();
-
                     } else {
                         Stage infoPopupWithTwoButtons;
                         if(lastWorkHours.getStartWork() != null && lastWorkHours.getEndWork() == null) {

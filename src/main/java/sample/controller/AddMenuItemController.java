@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import sample.dto.MenuItemDto;
+import sample.dto.MenuItemDTO;
 import sample.factory.PopupFactory;
 import sample.rest.MenuItemRestClient;
 
@@ -52,7 +52,7 @@ public class AddMenuItemController implements Initializable {
 
     private void initializeSaveButton() {
         saveButton.setOnAction(x -> {
-            MenuItemDto menuItemDto = createMenuItemDto();
+            MenuItemDTO menuItemDto = createMenuItemDto();
             Stage waitingPopup = popupFactory.createWaitingPopup("Connecting to the server...");
             waitingPopup.show();
             menuItemRestClient.saveMenuItem(menuItemDto, ()->{
@@ -64,13 +64,13 @@ public class AddMenuItemController implements Initializable {
         });
     }
 
-    private MenuItemDto createMenuItemDto() {
+    private MenuItemDTO createMenuItemDto() {
         String name = nameTextField.getText();
         Double price = Double.valueOf(priceTextField.getText());
         Integer kcal = Integer.valueOf(kcalTextField.getText());
         String type = typeTextField.getText();
 
-        return MenuItemDto.of(name, price, kcal, type);
+        return MenuItemDTO.of(name, price, kcal, type);
     }
 
     private void initializeCancelButton() {

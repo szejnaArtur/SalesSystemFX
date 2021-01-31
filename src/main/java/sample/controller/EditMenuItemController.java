@@ -7,7 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import sample.dto.MenuItemDto;
+import sample.dto.MenuItemDTO;
 import sample.factory.PopupFactory;
 import sample.handler.MenuItemLoadedHandler;
 import sample.rest.MenuItemRestClient;
@@ -62,7 +62,7 @@ public class EditMenuItemController implements Initializable {
             Stage waitingPopup = popupFactory.createWaitingPopup("Connecting to the server...");
             waitingPopup.show();
             Thread thread = new Thread(()->{
-                MenuItemDto dto = createMenuItemDto();
+                MenuItemDTO dto = createMenuItemDto();
                 menuItemRestClient.saveMenuItem(dto, ()-> Platform.runLater(()->{
                     waitingPopup.close();
                     Stage infoPopup =
@@ -74,20 +74,20 @@ public class EditMenuItemController implements Initializable {
         });
     }
 
-    private MenuItemDto createMenuItemDto() {
+    private MenuItemDTO createMenuItemDto() {
         String name = nameTextField.getText();
         Double price = Double.valueOf(priceTextField.getText());
         Integer kcal = Integer.valueOf(kcalTextField.getText());
         String type = typeTextField.getText();
         String descrition = descriptionTextField.getText();
-        MenuItemDto dto = MenuItemDto.of(name, price, kcal, type, descrition);
+        MenuItemDTO dto = MenuItemDTO.of(name, price, kcal, type, descrition);
         dto.setIdMenuItem(idMenuItem);
         return dto;
     }
 
     public void loadMenuItemData(Long idMenuItem, MenuItemLoadedHandler handler) {
         Thread thread = new Thread(() -> {
-            MenuItemDto dto = menuItemRestClient.getMenuItem(idMenuItem);
+            MenuItemDTO dto = menuItemRestClient.getMenuItem(idMenuItem);
             Platform.runLater(() -> {
                 this.idMenuItem = idMenuItem;
                 nameTextField.setText(dto.getName());

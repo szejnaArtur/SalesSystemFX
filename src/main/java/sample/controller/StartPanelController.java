@@ -13,7 +13,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sample.dto.EmployeeDTO;
+import sample.dto.WorkHoursDTO;
+import sample.factory.PopupFactory;
 import sample.rest.EmployeeRestClient;
+import sample.rest.WorkHoursRestClient;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,10 +28,12 @@ public class StartPanelController implements Initializable {
 
     private static final String RESTAURANT_PANEL_FXML = "/fxml/restaurantPanel.fxml";
     private static final String LOG_PANEL_FXML = "/fxml/logPanel.fxml";
+    private static final String EMPLOYEE_PANEL_FXML = "/fxml/employeesAtWorkPanel.fxml";
     private static final String APP_TITLE = "POS Restaurant System";
 
     private final EmployeeRestClient employeeRestClient;
-    private EmployeeDTO employeeDTO;
+    private final WorkHoursRestClient workHoursRestClient;
+    private final PopupFactory popupFactory;
 
     private String userPIN = "";
 
@@ -49,6 +54,9 @@ public class StartPanelController implements Initializable {
 
     @FXML
     private Button logButton;
+
+    @FXML
+    private Button employeeAtWorkButton;
 
     @FXML
     private Button notAvailableButton;
@@ -97,7 +105,8 @@ public class StartPanelController implements Initializable {
 
     public StartPanelController() {
         this.employeeRestClient = new EmployeeRestClient();
-        this.employeeDTO = new EmployeeDTO();
+        this.popupFactory = new PopupFactory();
+        this.workHoursRestClient = new WorkHoursRestClient();
     }
 
     @Override
@@ -116,6 +125,11 @@ public class StartPanelController implements Initializable {
         initializeOkButton();
         initializeTimeButton();
         initializeLogButton();
+        initializeEmployeeAtWorkButton();
+    }
+
+    private void initializeEmployeeAtWorkButton() {
+        employeeAtWorkButton.setOnAction(x-> openEmployeeAtWorkPanel());
     }
 
     private void initializeLogButton() {
@@ -136,42 +150,23 @@ public class StartPanelController implements Initializable {
     }
 
     private void employeeAuthorization() {
-        employeeDTO = employeeRestClient.getEmployeeByPIN(userPIN);
-        userPIN = "";
-
-        if (employeeDTO.isAuthenticated()) {
-            openRestaurantPanelAndCloseStartPanel();
+        if(logDataValidation()){
+            EmployeeDTO employee = employeeRestClient.getEmployeeByPIN(userPIN);
+            if (employee.isAuthenticated()){
+                WorkHoursDTO lastWorkHours = workHoursRestClient.getLastWorkHours(employee.getIdEmployee());
+                if (lastWorkHours.getStartWork() != null && lastWorkHours.getEndWork() == null){
+                    openRestaurantPanelAndCloseStartPanel();
+                } else {
+                    popupFactory.createInfoPopup("The employee is out of work now.").show();
+                    resetUserPIN();
+                }
+            } else {
+                popupFactory.createInfoPopup("Employee is not exist.").show();
+                resetUserPIN();
+            }
         } else {
-            nameLabel.setText("Employee not found");
-        }
-    }
-
-    private void openRestaurantPanelAndCloseStartPanel() {
-        try {
-            Stage startPanelStage = new Stage();
-            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(RESTAURANT_PANEL_FXML));
-            Scene scene = new Scene(startPanelRoot, 1920, 1000);
-            startPanelStage.setTitle(APP_TITLE);
-            startPanelStage.setFullScreen(true);
-            startPanelStage.setScene(scene);
-            startPanelStage.show();
-            getStage().close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void openLogPanel() {
-        try {
-            Stage stage = new Stage();
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(StartPanelController.LOG_PANEL_FXML));
-            Scene scene = new Scene(loader.load(), 400, 620);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+            popupFactory.createInfoPopup("Invalid data formats.").show();
+            resetUserPIN();
         }
     }
 
@@ -223,5 +218,56 @@ public class StartPanelController implements Initializable {
         return (Stage) startPanelPane.getScene().getWindow();
     }
 
+    private Boolean logDataValidation() {
+        if (userPIN.equals("")) return false;
+        return userPIN.length() == 4;
+    }
+
+    private void resetUserPIN(){
+        userPIN = "";
+    }
+
+    private void openRestaurantPanelAndCloseStartPanel() {
+        try {
+            Stage startPanelStage = new Stage();
+            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(RESTAURANT_PANEL_FXML));
+            Scene scene = new Scene(startPanelRoot, 1920, 1000);
+            startPanelStage.setTitle(APP_TITLE);
+            startPanelStage.setFullScreen(true);
+            startPanelStage.setScene(scene);
+            startPanelStage.show();
+            getStage().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openLogPanel() {
+        try {
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(StartPanelController.LOG_PANEL_FXML));
+            Scene scene = new Scene(loader.load(), 550, 800);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openEmployeeAtWorkPanel() {
+        try {
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(StartPanelController.EMPLOYEE_PANEL_FXML));
+            Scene scene = new Scene(loader.load(), 1000, 700);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

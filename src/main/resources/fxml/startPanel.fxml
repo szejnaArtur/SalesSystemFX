@@ -49,7 +49,7 @@
                         </VBox>
                         <VBox prefHeight="460.0" prefWidth="350.0">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="140.0" prefWidth="330.0" styleClass="blue-button" text="BUTTON">
+                              <Button fx:id="employeeAtWorkButton" mnemonicParsing="false" prefHeight="140.0" prefWidth="330.0" styleClass="blue-button" text="Employees at work">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="10.0" top="10.0" />
                                  </VBox.margin>

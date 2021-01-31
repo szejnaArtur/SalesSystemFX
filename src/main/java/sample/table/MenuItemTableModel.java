@@ -1,7 +1,7 @@
 package sample.table;
 
 import javafx.beans.property.SimpleStringProperty;
-import sample.dto.MenuItemDto;
+import sample.dto.MenuItemDTO;
 
 public class MenuItemTableModel {
 
@@ -19,7 +19,7 @@ public class MenuItemTableModel {
         this.kcal = new SimpleStringProperty(kcal.toString());
     }
 
-    public static MenuItemTableModel of(MenuItemDto menuItemDto){
+    public static MenuItemTableModel of(MenuItemDTO menuItemDto){
      return new MenuItemTableModel(menuItemDto.getIdMenuItem(), menuItemDto.getName(), menuItemDto.getPrice(),
              menuItemDto.getKcal(), menuItemDto.getType());
     }

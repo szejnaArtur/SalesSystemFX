@@ -7,7 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import sample.dto.MenuItemDto;
+import sample.dto.MenuItemDTO;
 import sample.handler.MenuItemLoadedHandler;
 import sample.rest.MenuItemRestClient;
 
@@ -55,7 +55,7 @@ public class ViewMenuItemController implements Initializable {
 
     public void loadMenuItemData(Long idMenuItem, MenuItemLoadedHandler handler) {
         Thread thread = new Thread(() -> {
-            MenuItemDto dto = menuItemRestClient.getMenuItem(idMenuItem);
+            MenuItemDTO dto = menuItemRestClient.getMenuItem(idMenuItem);
             Platform.runLater(() -> {
                 nameTextField.setText(dto.getName());
                 priceTextField.setText(Double.toString(dto.getPrice()));

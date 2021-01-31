@@ -3,7 +3,7 @@ package sample.dto;
 import lombok.Data;
 
 @Data
-public class MenuItemDto {
+public class MenuItemDTO {
 
     private Long idMenuItem;
     private String name;
@@ -12,8 +12,8 @@ public class MenuItemDto {
     private String description;
     private String type;
 
-    public static MenuItemDto of(String name, Double price, Integer kcal, String type){
-        MenuItemDto dto = new MenuItemDto();
+    public static MenuItemDTO of(String name, Double price, Integer kcal, String type){
+        MenuItemDTO dto = new MenuItemDTO();
         dto.setName(name);
         dto.setPrice(price);
         dto.setKcal(kcal);
@@ -21,8 +21,8 @@ public class MenuItemDto {
         return dto;
     }
 
-    public static MenuItemDto of(String name, Double price, Integer kcal, String type, String description){
-        MenuItemDto dto = new MenuItemDto();
+    public static MenuItemDTO of(String name, Double price, Integer kcal, String type, String description){
+        MenuItemDTO dto = new MenuItemDTO();
         dto.setName(name);
         dto.setPrice(price);
         dto.setKcal(kcal);

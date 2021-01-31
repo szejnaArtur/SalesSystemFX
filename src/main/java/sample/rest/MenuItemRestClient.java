@@ -3,7 +3,7 @@ package sample.rest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import sample.dto.MenuItemDto;
+import sample.dto.MenuItemDTO;
 import sample.handler.DeletedMenuItemHandler;
 import sample.handler.SavedMenuItemHandler;
 
@@ -24,23 +24,21 @@ public class MenuItemRestClient {
         this.restTemplate = new RestTemplate();
     }
 
-    public List<MenuItemDto> getMenuItems() {
-        ResponseEntity<MenuItemDto[]> menuItems = restTemplate.getForEntity(GET_FINDALL_URL, MenuItemDto[].class);
+    public List<MenuItemDTO> getMenuItems() {
+        ResponseEntity<MenuItemDTO[]> menuItems = restTemplate.getForEntity(GET_FINDALL_URL, MenuItemDTO[].class);
         return Arrays.asList(Objects.requireNonNull(menuItems.getBody()));
     }
 
-    public void saveMenuItem(MenuItemDto menuItemDto, SavedMenuItemHandler handler) {
-        ResponseEntity<MenuItemDto> responseEntity = restTemplate.postForEntity(POST_ADD_URL, menuItemDto, MenuItemDto.class);
+    public void saveMenuItem(MenuItemDTO menuItemDto, SavedMenuItemHandler handler) {
+        ResponseEntity<MenuItemDTO> responseEntity = restTemplate.postForEntity(POST_ADD_URL, menuItemDto, MenuItemDTO.class);
         if(HttpStatus.OK.equals(responseEntity.getStatusCode())){
             handler.handle();
-        } else {
-            //TODO implement
         }
     }
 
-    public MenuItemDto getMenuItem(Long idMenuItem) {
+    public MenuItemDTO getMenuItem(Long idMenuItem) {
         String url = "http://localhost:8080/menuItems/find/" + idMenuItem;
-        ResponseEntity<MenuItemDto> responseEntity = restTemplate.getForEntity(url, MenuItemDto.class);
+        ResponseEntity<MenuItemDTO> responseEntity = restTemplate.getForEntity(url, MenuItemDTO.class);
         if(HttpStatus.OK.equals(responseEntity.getStatusCode())){
             return responseEntity.getBody();
         } else {

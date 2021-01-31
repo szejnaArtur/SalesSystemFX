@@ -14,7 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import sample.dto.MenuItemDto;
+import sample.dto.MenuItemDTO;
 import sample.factory.PopupFactory;
 import sample.rest.MenuItemRestClient;
 import sample.table.MenuItemTableModel;
@@ -194,7 +194,7 @@ public class MenuItemController implements Initializable {
 
     private void loadMenuItemData() {
         Thread thread = new Thread(() -> {
-            List<MenuItemDto> menuItems = menuItemRestClient.getMenuItems();
+            List<MenuItemDTO> menuItems = menuItemRestClient.getMenuItems();
             data.clear();
             data.addAll(menuItems.stream().map(MenuItemTableModel::of).collect(Collectors.toList()));
         });
