@@ -155,6 +155,7 @@ public class StartPanelController implements Initializable {
             if (employee.isAuthenticated()){
                 WorkHoursDTO lastWorkHours = workHoursRestClient.getLastWorkHours(employee.getIdEmployee());
                 if (lastWorkHours.getStartWork() != null && lastWorkHours.getEndWork() == null){
+                    LoggedEmployeeCotroller.employeeDTO = employee;
                     openRestaurantPanelAndCloseStartPanel();
                 } else {
                     popupFactory.createInfoPopup("The employee is out of work now.").show();
@@ -229,13 +230,13 @@ public class StartPanelController implements Initializable {
 
     private void openRestaurantPanelAndCloseStartPanel() {
         try {
-            Stage startPanelStage = new Stage();
+            Stage restaurantPanelStage = new Stage();
             Parent startPanelRoot = FXMLLoader.load(getClass().getResource(RESTAURANT_PANEL_FXML));
             Scene scene = new Scene(startPanelRoot, 1920, 1000);
-            startPanelStage.setTitle(APP_TITLE);
-            startPanelStage.setFullScreen(true);
-            startPanelStage.setScene(scene);
-            startPanelStage.show();
+            restaurantPanelStage.setTitle(APP_TITLE);
+            restaurantPanelStage.setFullScreen(true);
+            restaurantPanelStage.setScene(scene);
+            restaurantPanelStage.show();
             getStage().close();
         } catch (IOException e) {
             e.printStackTrace();

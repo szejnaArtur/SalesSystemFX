@@ -5,8 +5,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import sample.dto.EmployeeDTO;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,14 +28,27 @@ public class RestaurantPanelController implements Initializable {
     @FXML
     private Button orderButton;
 
+    @FXML
+    private TextField loggedTextField;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeOrderButton();
         initializeLogoutButton();
+        initializeLoggedTextField();
+    }
+
+    private void initializeLoggedTextField() {
+        String firstName = LoggedEmployeeCotroller.employeeDTO.getFirstName();
+        String lastName = LoggedEmployeeCotroller.employeeDTO.getLastName();
+        if(firstName != null){
+            loggedTextField.setText(firstName + " " + lastName);
+        }
     }
 
     private void initializeLogoutButton() {
         logoutButton.setOnAction(x -> {
+            LoggedEmployeeCotroller.employeeDTO = new EmployeeDTO();
             openAppCloseStage(STARTPANEL_FXML, getStage());
             getStage().close();
         });

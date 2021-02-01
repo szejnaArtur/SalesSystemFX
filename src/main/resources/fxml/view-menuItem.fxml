@@ -60,7 +60,7 @@
    </center>
    <stylesheets>
       <URL value="@../css/global-colors.css" />
-      <URL value="@../css/menuItemCrude.css" />
-      <URL value="@../css/login.css" />
+      <URL value="@../css/crude.css" />
+      <URL value="@../css/style.css" />
    </stylesheets>
 </BorderPane>

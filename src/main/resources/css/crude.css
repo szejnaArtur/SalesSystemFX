@@ -54,6 +54,30 @@
     -fx-font-size: 25px;
 }
 
+.dark-green-button:hover{
+    -fx-text-fill: white;
+    -fx-background-color: #23641c;
+    -fx-border-color: -fx-primary-blue;
+    -fx-background-radius: 0;
+    -fx-font-size: 25px;
+}
+
+.orange-button{
+    -fx-text-fill: black;
+    -fx-background-color: #fabf1e;
+    -fx-border-color: -fx-primary-blue;
+    -fx-background-radius: 0;
+    -fx-font-size: 25px;
+}
+
+.orange-button:hover{
+    -fx-text-fill: black;
+    -fx-background-color: #fbc52d;
+    -fx-border-color: -fx-primary-blue;
+    -fx-background-radius: 0;
+    -fx-font-size: 25px;
+}
+
 .light-green-button{
     -fx-text-fill: black;
     -fx-background-color: #37D126;

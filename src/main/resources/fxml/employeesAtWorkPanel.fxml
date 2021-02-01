@@ -36,7 +36,7 @@
       </VBox>
    </children>
    <stylesheets>
-      <URL value="@../css/login.css" />
+      <URL value="@../css/style.css" />
       <URL value="@../css/global-colors.css" />
    </stylesheets>
 </AnchorPane>

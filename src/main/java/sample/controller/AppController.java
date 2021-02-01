@@ -20,58 +20,74 @@ public class AppController implements Initializable {
     private Pane menuPane;
 
     @FXML
-    private Button tableOne;
+    private Button tableOneButton;
 
     @FXML
-    private Button tableTwo;
+    private Button tableTwoButton;
 
     @FXML
-    private Button tableThree;
+    private Button tableThreeButton;
 
     @FXML
-    private Button tableFour;
+    private Button tableFourButton;
 
     @FXML
-    private Button tableFive;
+    private Button tableFiveButton;
 
     @FXML
-    private Button tableSix;
+    private Button tableSixButton;
 
     @FXML
-    private Button tableSeven;
+    private Button tableSevenButton;
 
     @FXML
-    private Button tableEight;
+    private Button tableEightButton;
 
     @FXML
-    private Button tableNine;
+    private Button tableNineButton;
 
     @FXML
-    private Button tableTen;
+    private Button tableTenButton;
 
     @FXML
-    private Button tableIEleven;
+    private Button tableIElevenButton;
 
     @FXML
-    private Button tableTwelve;
+    private Button tableTwelveButton;
 
     @FXML
-    private Button tableThirteen;
+    private Button tableThirteenButton;
 
     @FXML
-    private Button tableFouteen;
+    private Button tableFouteenButton;
 
     @FXML
-    private Button tableFiveteen;
+    private Button tableTakeawayButton;
 
     @FXML
     private TableView<?> orderTableView;
 
-    public AppController() {}
+    public AppController() {
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadView();
+        initializeOneButton();
+    }
+
+    private String orangeButtonStyle() {
+        return ".orange-button{\n" +
+                "    -fx-text-fill: black;\n" +
+                "    -fx-background-color: #fabf1e;\n" +
+                "    -fx-border-color: #003366;\n" +
+                "    -fx-background-radius: 0;\n" +
+                "    -fx-font-size: 25px;\n" +
+                "}";
+    }
+
+    private void initializeOneButton() {
+        tableOneButton.setOnAction(x-> tableOneButton.setStyle(orangeButtonStyle()));
     }
 
     private void loadView() {

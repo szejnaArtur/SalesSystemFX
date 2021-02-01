@@ -118,7 +118,7 @@
    </children>
    <stylesheets>
       <URL value="@../css/global-colors.css" />
-      <URL value="@../css/login.css" />
-      <URL value="@../css/menuItemCrude.css" />
+      <URL value="@../css/style.css" />
+      <URL value="@../css/crude.css" />
    </stylesheets>
 </AnchorPane>

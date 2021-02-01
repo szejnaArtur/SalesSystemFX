@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.AppController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.AppController">
   <tabs>
     <Tab text="Menu">
          <content>
@@ -31,56 +32,27 @@
                            <children>
                               <HBox prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <Button fx:id="tableOne" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 1">
+                                    <Button fx:id="tableOneButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 1">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="tableTwo" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 2">
+                                    <Button fx:id="tableTwoButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 2">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="tableThree" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 3">
+                                    <Button fx:id="tableThreeButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 3">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="tableFour" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 4">
+                                    <Button fx:id="tableFourButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 4">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="tableFive" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 5">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <Button fx:id="tableSix" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 6">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableSeven" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 7">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableEight" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 8">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableNine" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 9">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableTen" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 10">
+                                    <Button fx:id="tableFiveButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 5">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
@@ -89,27 +61,56 @@
                               </HBox>
                               <HBox prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <Button fx:id="tableIEleven" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table11">
+                                    <Button fx:id="tableSixButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 6">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="tableTwelve" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 12">
+                                    <Button fx:id="tableSevenButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 7">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="tableThirteen" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 13">
+                                    <Button fx:id="tableEightButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 8">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="tableFouteen" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Table 14">
+                                    <Button fx:id="tableNineButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 9">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="tableFiveteen" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" text="Na wynos">
+                                    <Button fx:id="tableTenButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 10">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="tableIElevenButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table11">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="tableTwelveButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 12">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="tableThirteenButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 13">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="tableFouteenButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 14">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="tableTakeawayButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Takeaway">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
@@ -123,15 +124,20 @@
                               <TableView fx:id="orderTableView" prefHeight="394.0" prefWidth="719.0">
                                  <columns>
                                     <TableColumn prefWidth="329.0" text="Item" />
-                                    <TableColumn prefWidth="102.0" text="Price" />
-                                    <TableColumn prefWidth="419.0" text="Description" />
+                                    <TableColumn prefWidth="107.0" text="Price" />
+                                    <TableColumn prefWidth="102.0" text="Quantity" />
+                                    <TableColumn prefWidth="144.0" text="Total" />
+                                    <TableColumn prefWidth="271.0" text="Description" />
                                  </columns>
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
                               </TableView>
                               <HBox prefHeight="98.0" prefWidth="960.0">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="146.0" prefWidth="412.0" text="Remove selected">
+                                    <Button mnemonicParsing="false" prefHeight="146.0" prefWidth="412.0" styleClass="purple-button" text="Remove selected">
                                        <HBox.margin>
-                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                          <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
                                        </HBox.margin>
                                     </Button>
                                     <Label text="Total:">
@@ -226,4 +232,9 @@
     </Tab>
       <Tab text="Settings" />
   </tabs>
+   <stylesheets>
+      <URL value="@../css/style.css" />
+      <URL value="@../css/global-colors.css" />
+      <URL value="@../css/crude.css" />
+   </stylesheets>
 </TabPane>
