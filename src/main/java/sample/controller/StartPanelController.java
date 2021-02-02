@@ -129,7 +129,7 @@ public class StartPanelController implements Initializable {
     }
 
     private void initializeEmployeeAtWorkButton() {
-        employeeAtWorkButton.setOnAction(x-> openEmployeeAtWorkPanel());
+        employeeAtWorkButton.setOnAction(x -> openEmployeeAtWorkPanel());
     }
 
     private void initializeLogButton() {
@@ -150,12 +150,12 @@ public class StartPanelController implements Initializable {
     }
 
     private void employeeAuthorization() {
-        if(logDataValidation()){
+        if (logDataValidation()) {
             EmployeeDTO employee = employeeRestClient.getEmployeeByPIN(userPIN);
-            if (employee.isAuthenticated()){
+            if (employee.isAuthenticated()) {
                 WorkHoursDTO lastWorkHours = workHoursRestClient.getLastWorkHours(employee.getIdEmployee());
-                if (lastWorkHours.getStartWork() != null && lastWorkHours.getEndWork() == null){
-                    LoggedEmployeeCotroller.employeeDTO = employee;
+                if (lastWorkHours.getStartWork() != null && lastWorkHours.getEndWork() == null) {
+                    StartController.employeeDTO = employee;
                     openRestaurantPanelAndCloseStartPanel();
                 } else {
                     popupFactory.createInfoPopup("The employee is out of work now.").show();
@@ -224,7 +224,7 @@ public class StartPanelController implements Initializable {
         return userPIN.length() == 4;
     }
 
-    private void resetUserPIN(){
+    private void resetUserPIN() {
         userPIN = "";
     }
 

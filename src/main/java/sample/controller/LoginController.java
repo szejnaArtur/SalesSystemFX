@@ -14,6 +14,7 @@ import sample.dto.UserCredentialsDTO;
 import sample.factory.PopupFactory;
 import sample.rest.Authenticator;
 import sample.rest.AuthenticatorImpl;
+import sample.rest.MenuItemRestClient;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,6 +27,7 @@ public class LoginController implements Initializable {
 
     private final PopupFactory popupFactory;
     private final Authenticator authenticator;
+    private final MenuItemRestClient menuItemRestClient;
 
     @FXML
     private Button exitButton;
@@ -45,6 +47,7 @@ public class LoginController implements Initializable {
     public LoginController() {
         popupFactory = new PopupFactory();
         authenticator = new AuthenticatorImpl();
+        menuItemRestClient = new MenuItemRestClient();
     }
 
     @Override
@@ -69,6 +72,7 @@ public class LoginController implements Initializable {
                 (authenticationResult) -> Platform.runLater(() -> {
                     waitingPopup.close();
                     if (authenticationResult.isAuthenticated()) {
+                        StartController.menuItemsDTO.addAll(menuItemRestClient.getMenuItems());
                         openStartPanelAndCloseLoginStage();
                     } else {
                         showIncorrectCredentialsMessage();

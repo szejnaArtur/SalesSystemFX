@@ -4,17 +4,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import sample.dto.MenuItemTypeDTO;
+import sample.rest.MenuItemTypeRestClient;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AppController implements Initializable {
 
     private final static String MENUITEM_FXML = "/fxml/menuItem.fxml";
+
+    private final MenuItemTypeRestClient menuItemTypeRestClient;
 
     @FXML
     private Pane menuPane;
@@ -67,13 +74,26 @@ public class AppController implements Initializable {
     @FXML
     private TableView<?> orderTableView;
 
+    @FXML
+    private TabPane menuItemTabPane;
+
     public AppController() {
+        menuItemTypeRestClient = new MenuItemTypeRestClient();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadView();
         initializeOneButton();
+        initializeMenuItemTabPane();
+    }
+
+    private void initializeMenuItemTabPane() {
+        List<MenuItemTypeDTO> menuItemTypes = menuItemTypeRestClient.getMenuItemTypes();
+        for (MenuItemTypeDTO dto : menuItemTypes){
+            Tab tab = new Tab(dto.getName());
+            menuItemTabPane.getTabs().add(tab);
+        }
     }
 
     private String orangeButtonStyle() {

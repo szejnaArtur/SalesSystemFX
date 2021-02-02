@@ -39,8 +39,8 @@ public class RestaurantPanelController implements Initializable {
     }
 
     private void initializeLoggedTextField() {
-        String firstName = LoggedEmployeeCotroller.employeeDTO.getFirstName();
-        String lastName = LoggedEmployeeCotroller.employeeDTO.getLastName();
+        String firstName = StartController.employeeDTO.getFirstName();
+        String lastName = StartController.employeeDTO.getLastName();
         if(firstName != null){
             loggedTextField.setText(firstName + " " + lastName);
         }
@@ -48,7 +48,7 @@ public class RestaurantPanelController implements Initializable {
 
     private void initializeLogoutButton() {
         logoutButton.setOnAction(x -> {
-            LoggedEmployeeCotroller.employeeDTO = new EmployeeDTO();
+            StartController.employeeDTO = new EmployeeDTO();
             openAppCloseStage(STARTPANEL_FXML, getStage());
             getStage().close();
         });
