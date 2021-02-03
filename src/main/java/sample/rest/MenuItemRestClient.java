@@ -37,7 +37,7 @@ public class MenuItemRestClient {
     }
 
     public MenuItemDTO getMenuItem(Long idMenuItem) {
-        String url = "http://localhost:8080/menuItems/find/" + idMenuItem;
+        String url = GET_FIND_URL + idMenuItem;
         ResponseEntity<MenuItemDTO> responseEntity = restTemplate.getForEntity(url, MenuItemDTO.class);
         if(HttpStatus.OK.equals(responseEntity.getStatusCode())){
             return responseEntity.getBody();

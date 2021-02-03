@@ -7,21 +7,29 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
+import sample.dto.MenuItemDTO;
 import sample.dto.MenuItemTypeDTO;
+import sample.rest.MenuItemRestClient;
 import sample.rest.MenuItemTypeRestClient;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AppController implements Initializable {
 
     private final static String MENUITEM_FXML = "/fxml/menuItem.fxml";
 
     private final MenuItemTypeRestClient menuItemTypeRestClient;
+    private final MenuItemRestClient menuItemRestClient;
+
+    Map<String, Integer> order = new HashMap<>();
 
     @FXML
     private Pane menuPane;
@@ -79,35 +87,57 @@ public class AppController implements Initializable {
 
     public AppController() {
         menuItemTypeRestClient = new MenuItemTypeRestClient();
+        menuItemRestClient = new MenuItemRestClient();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadView();
-        initializeOneButton();
         initializeMenuItemTabPane();
     }
 
     private void initializeMenuItemTabPane() {
         List<MenuItemTypeDTO> menuItemTypes = menuItemTypeRestClient.getMenuItemTypes();
-        for (MenuItemTypeDTO dto : menuItemTypes){
-            Tab tab = new Tab(dto.getName());
+        List<MenuItemDTO> menuItems = menuItemRestClient.getMenuItems();
+        Map<String, List<MenuItemDTO>> menu = new HashMap<>();
+        for (MenuItemTypeDTO type : menuItemTypes) {
+            menu.put(type.getName(), new ArrayList<>());
+        }
+
+        for (MenuItemDTO menuItem : menuItems) {
+            menu.get(menuItem.getType()).add(menuItem);
+        }
+
+        for (MenuItemTypeDTO type : menuItemTypes) {
+            Tab tab = new Tab(type.getName());
+            AnchorPane anchorPane = new AnchorPane();
+            GridPane gridPane = new GridPane();
+
+            int y = 0;
+            int x = 0;
+            for (MenuItemDTO item : menu.get(type.getName())) {
+                if (x == 7) {
+                    y++;
+                    x = 0;
+                }
+                Button button = getButton(item);
+                gridPane.add(button, x++, y);
+            }
+            anchorPane.getChildren().add(gridPane);
+            tab.setContent(anchorPane);
             menuItemTabPane.getTabs().add(tab);
         }
     }
 
-    private String orangeButtonStyle() {
-        return ".orange-button{\n" +
-                "    -fx-text-fill: black;\n" +
-                "    -fx-background-color: #fabf1e;\n" +
-                "    -fx-border-color: #003366;\n" +
-                "    -fx-background-radius: 0;\n" +
-                "    -fx-font-size: 25px;\n" +
-                "}";
-    }
+    private Button getButton(MenuItemDTO item) {
+        Button button = new Button(item.getName() + "\n" + item.getPrice());
+        button.setPrefSize(275, 128);
+        button.setTextAlignment(TextAlignment.CENTER);
+        button.setFont(Font.font(18));
+        button.setOnAction(x -> {
 
-    private void initializeOneButton() {
-        tableOneButton.setOnAction(x-> tableOneButton.setStyle(orangeButtonStyle()));
+        });
+        return button;
     }
 
     private void loadView() {
