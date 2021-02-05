@@ -15,6 +15,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import sample.dto.MenuItemDTO;
 import sample.dto.MenuItemTypeDTO;
+import sample.dto.OrderDTO;
+import sample.dto.OrderItemDTO;
 import sample.rest.MenuItemRestClient;
 import sample.rest.MenuItemTypeRestClient;
 
@@ -29,7 +31,7 @@ public class AppController implements Initializable {
     private final MenuItemTypeRestClient menuItemTypeRestClient;
     private final MenuItemRestClient menuItemRestClient;
 
-    Map<String, Integer> order = new HashMap<>();
+    private OrderDTO order = new OrderDTO();
 
     @FXML
     private Pane menuPane;
@@ -135,7 +137,25 @@ public class AppController implements Initializable {
         button.setTextAlignment(TextAlignment.CENTER);
         button.setFont(Font.font(18));
         button.setOnAction(x -> {
+            if (order.isOrderNull()) {
+                OrderItemDTO orderItemDTO = new OrderItemDTO(item);
+                order.addOrderItemToOrder(orderItemDTO);
+            } else {
+                if (order.isOrderItem(item)) {
+                    for (OrderItemDTO orderItemDTO : order.getOrderItems()){
+                        if (orderItemDTO.getMenuItemDTO().getName().equals(item.getName())){
+                            orderItemDTO.increaseTheQuantity();
+                        }
+                    }
+                } else {
+                    OrderItemDTO orderItemDTO = new OrderItemDTO(item);
+                    order.addOrderItemToOrder(orderItemDTO);
+                }
+            }
 
+            for (OrderItemDTO dto : order.getOrderItems()) {
+                System.out.println(dto.getMenuItemDTO().getName() + ": " + dto.getQuantity());
+            }
         });
         return button;
     }
