@@ -1,12 +1,12 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -19,10 +19,12 @@ import sample.dto.OrderDTO;
 import sample.dto.OrderItemDTO;
 import sample.rest.MenuItemRestClient;
 import sample.rest.MenuItemTypeRestClient;
+import sample.table.OrderTableModel;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AppController implements Initializable {
 
@@ -31,7 +33,9 @@ public class AppController implements Initializable {
     private final MenuItemTypeRestClient menuItemTypeRestClient;
     private final MenuItemRestClient menuItemRestClient;
 
-    private OrderDTO order = new OrderDTO();
+    private final ObservableList<OrderTableModel> data;
+
+    private final OrderDTO order;
 
     @FXML
     private Pane menuPane;
@@ -82,20 +86,39 @@ public class AppController implements Initializable {
     private Button tableTakeawayButton;
 
     @FXML
-    private TableView<?> orderTableView;
+    private TableView<OrderTableModel> orderTableView;
 
     @FXML
     private TabPane menuItemTabPane;
 
+    @FXML
+    private Button removeButton;
+
+    @FXML
+    private Button settlementButton;
+
+    @FXML
+    private Label totalLabel;
+
     public AppController() {
-        menuItemTypeRestClient = new MenuItemTypeRestClient();
-        menuItemRestClient = new MenuItemRestClient();
+        this.menuItemTypeRestClient = new MenuItemTypeRestClient();
+        this.menuItemRestClient = new MenuItemRestClient();
+        this.data = FXCollections.observableArrayList();
+        this.order = new OrderDTO();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadView();
         initializeMenuItemTabPane();
+        initializeOrderTableView();
+        initializeRemoveButton();
+    }
+
+    private void initializeRemoveButton() {
+        removeButton.setOnAction(x->{
+
+        });
     }
 
     private void initializeMenuItemTabPane() {
@@ -153,11 +176,46 @@ public class AppController implements Initializable {
                 }
             }
 
-            for (OrderItemDTO dto : order.getOrderItems()) {
-                System.out.println(dto.getMenuItemDTO().getName() + ": " + dto.getQuantity());
-            }
+            loadMenuOrderData();
+            totalLabel.setText("Total: " + getTotalPrice() + " PLN");
+
         });
         return button;
+    }
+
+    private void initializeOrderTableView() {
+        orderTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TableColumn nameColumn = new TableColumn("Name");
+        nameColumn.setMinWidth(300);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, String>("item"));
+
+        TableColumn quantityColumn = new TableColumn("Quantity");
+        quantityColumn.setMinWidth(100);
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, Integer>("quantity"));
+
+        TableColumn priceColumn = new TableColumn("Price");
+        priceColumn.setMinWidth(100);
+        priceColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, Double>("price"));
+
+        TableColumn totalColumn = new TableColumn("Total");
+        totalColumn.setMinWidth(100);
+        totalColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, Double>("total"));
+
+        orderTableView.getColumns().addAll(nameColumn, quantityColumn, priceColumn, totalColumn);
+
+        loadMenuOrderData();
+
+        orderTableView.setItems(data);
+    }
+
+    private void loadMenuOrderData() {
+        Thread thread = new Thread(() -> {
+            List<OrderItemDTO> orderItem = order.getOrderItems();
+            data.clear();
+            data.addAll(orderItem.stream().map(OrderTableModel::of).collect(Collectors.toList()));
+        });
+        thread.start();
     }
 
     private void loadView() {
@@ -167,5 +225,13 @@ public class AppController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Double getTotalPrice(){
+        double total = 0.0;
+        for (OrderItemDTO orderItem : order.getOrderItems()){
+            total += orderItem.getQuantity() * orderItem.getMenuItemDTO().getPrice();
+        }
+        return total;
     }
 }

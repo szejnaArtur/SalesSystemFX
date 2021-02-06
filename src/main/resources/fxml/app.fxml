@@ -124,17 +124,22 @@
                               </TableView>
                               <HBox prefHeight="98.0" prefWidth="960.0">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="146.0" prefWidth="412.0" styleClass="purple-button" text="Remove selected">
+                                    <Button fx:id="removeButton" mnemonicParsing="false" prefHeight="77.0" prefWidth="300.0" styleClass="purple-button" text="Remove selected">
                                        <HBox.margin>
                                           <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Label text="Total:">
+                                    <Button fx:id="settlementButton" mnemonicParsing="false" prefHeight="77.0" prefWidth="300.0" styleClass="yellow-button" text="Settlement">
                                        <HBox.margin>
-                                          <Insets bottom="35.0" left="50.0" right="20.0" top="35.0" />
+                                          <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Label fx:id="totalLabel" text="Total: 0 PLN">
+                                       <HBox.margin>
+                                          <Insets left="5.0" top="25.0" />
                                        </HBox.margin>
                                        <font>
-                                          <Font size="18.0" />
+                                          <Font size="36.0" />
                                        </font>
                                     </Label>
                                  </children>
