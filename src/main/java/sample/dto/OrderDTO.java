@@ -5,6 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 public class OrderDTO {
@@ -29,6 +30,15 @@ public class OrderDTO {
 
     public boolean isOrderNull(){
         return orderItems.size() == 0;
+    }
+
+    public void removeOrderItem(OrderItemDTO orderItem){
+        orderItems.remove(orderItem);
+    }
+
+    public OrderItemDTO findOrderItemByName(String name){
+        Optional<OrderItemDTO> first = orderItems.stream().filter(x -> x.getMenuItemDTO().getName().equals(name)).findFirst();
+        return first.orElse(null);
     }
 
 }

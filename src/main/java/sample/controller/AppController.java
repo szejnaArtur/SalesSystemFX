@@ -116,8 +116,14 @@ public class AppController implements Initializable {
     }
 
     private void initializeRemoveButton() {
-        removeButton.setOnAction(x->{
-
+        removeButton.setOnAction(x -> {
+            OrderTableModel selectedOrderItem = orderTableView.getSelectionModel().getSelectedItem();
+            if (selectedOrderItem != null) {
+                OrderItemDTO orderItem = order.findOrderItemByName(selectedOrderItem.getItem());
+                order.removeOrderItem(orderItem);
+                loadMenuOrderData();
+                totalLabel.setText(String.format("Total: %.2f PLN", getTotalPrice()));
+            }
         });
     }
 
@@ -165,8 +171,8 @@ public class AppController implements Initializable {
                 order.addOrderItemToOrder(orderItemDTO);
             } else {
                 if (order.isOrderItem(item)) {
-                    for (OrderItemDTO orderItemDTO : order.getOrderItems()){
-                        if (orderItemDTO.getMenuItemDTO().getName().equals(item.getName())){
+                    for (OrderItemDTO orderItemDTO : order.getOrderItems()) {
+                        if (orderItemDTO.getMenuItemDTO().getName().equals(item.getName())) {
                             orderItemDTO.increaseTheQuantity();
                         }
                     }
@@ -177,8 +183,7 @@ public class AppController implements Initializable {
             }
 
             loadMenuOrderData();
-            totalLabel.setText("Total: " + getTotalPrice() + " PLN");
-
+            totalLabel.setText(String.format("Total: %.2f PLN", getTotalPrice()));
         });
         return button;
     }
@@ -227,9 +232,9 @@ public class AppController implements Initializable {
         }
     }
 
-    private Double getTotalPrice(){
+    private Double getTotalPrice() {
         double total = 0.0;
-        for (OrderItemDTO orderItem : order.getOrderItems()){
+        for (OrderItemDTO orderItem : order.getOrderItems()) {
             total += orderItem.getQuantity() * orderItem.getMenuItemDTO().getPrice();
         }
         return total;

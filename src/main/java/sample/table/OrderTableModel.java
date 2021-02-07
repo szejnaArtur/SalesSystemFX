@@ -14,7 +14,8 @@ public class OrderTableModel {
         this.item = new SimpleStringProperty(item);
         this.price = new SimpleStringProperty(Double.toString(price));
         this.quantity = new SimpleStringProperty(Integer.toString(quantity));
-        this.total = new SimpleStringProperty(Double.toString(price * quantity));
+        String totalPrice = String.format("%.2f", price*quantity);
+        this.total = new SimpleStringProperty(totalPrice);
     }
 
     public static OrderTableModel of(OrderItemDTO orderItemDTO){
