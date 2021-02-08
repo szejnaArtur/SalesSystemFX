@@ -91,7 +91,7 @@
                         <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="clearButton" mnemonicParsing="false" prefHeight="150.0" prefWidth="200.0" styleClass="login-button" text="Clear" GridPane.rowIndex="3">
+                  <Button fx:id="clearButton" mnemonicParsing="false" prefHeight="150.0" prefWidth="200.0" styleClass="orange-button" text="Clear" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
                      </GridPane.margin>
@@ -101,7 +101,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="okButton" mnemonicParsing="false" prefHeight="150.0" prefWidth="200.0" styleClass="login-button" text="Ok" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                  <Button fx:id="okButton" mnemonicParsing="false" prefHeight="150.0" prefWidth="200.0" styleClass="light-green-button" text="Ok" GridPane.columnIndex="2" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
                      </GridPane.margin>

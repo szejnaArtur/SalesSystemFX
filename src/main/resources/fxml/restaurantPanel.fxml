@@ -72,7 +72,7 @@
                   </ImageView>
                   <HBox prefHeight="200.0" prefWidth="1336.0">
                      <children>
-                        <Button fx:id="orderButton" mnemonicParsing="false" prefHeight="190.0" prefWidth="1500.0" text="ORDER">
+                        <Button fx:id="orderButton" mnemonicParsing="false" prefHeight="190.0" prefWidth="1500.0" styleClass="save-button" text="ORDER">
                            <HBox.margin>
                               <Insets left="10.0" right="10.0" top="10.0" />
                            </HBox.margin>
@@ -96,7 +96,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" text="AGC">
+                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="purple-button" text="AGC">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="10.0" right="5.0" top="10.0" />
                            </GridPane.margin>
@@ -104,7 +104,7 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="500.0" prefWidth="500.0" text="MPT" GridPane.rowIndex="1">
+                        <Button mnemonicParsing="false" prefHeight="500.0" prefWidth="500.0" styleClass="purple-button" text="MPT" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="10.0" left="10.0" right="5.0" top="5.0" />
                            </GridPane.margin>
@@ -112,7 +112,7 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" text="WASTE" GridPane.columnIndex="1">
+                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="light-green-button" text="WASTE" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
                            </GridPane.margin>
@@ -120,7 +120,7 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" text="GUEST REFUND" GridPane.columnIndex="2">
+                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="orange-button" text="GUEST REFUND" GridPane.columnIndex="2">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
                            </GridPane.margin>
@@ -128,7 +128,7 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" text="CCV Print No ChK" GridPane.columnIndex="4">
+                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="orange-button" text="CCV Print No ChK" GridPane.columnIndex="4">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="5.0" right="10.0" top="10.0" />
                            </GridPane.margin>
@@ -136,7 +136,7 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" text="OPEN THE DRAWER" GridPane.columnIndex="3">
+                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="yellow-button" text="OPEN THE DRAWER" GridPane.columnIndex="3">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
                            </GridPane.margin>
@@ -144,7 +144,7 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" text="CVV PRINT LAST" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="orange-button" text="CVV PRINT LAST" GridPane.columnIndex="4" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="10.0" left="5.0" right="10.0" top="5.0" />
                            </GridPane.margin>
@@ -152,7 +152,7 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" text="UPSELL" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="purple-button" text="UPSELL" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                            </GridPane.margin>
@@ -160,7 +160,7 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" text="CHANGE RVC" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="dark-green-button" text="CHANGE RVC" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                            </GridPane.margin>
@@ -168,7 +168,7 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
-                        <Button fx:id="logoutButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" text="LOGOUT" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <Button fx:id="logoutButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="cancel-button" text="LOGOUT" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                            </GridPane.margin>

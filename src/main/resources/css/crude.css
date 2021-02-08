@@ -2,118 +2,150 @@
     -fx-background-color: -fx-primary-red;
     -fx-background-radius: 0;
     -fx-text-fill: white;
-    -fx-font-size: 11px;
+    -fx-font-size: 25px;
     -fx-alignment: center;
 }
 
-.cancel-button:hover{
+.cancel-button:hover {
     -fx-background-color: -fx-secundary-red;
 }
 
-.save-button{
+.cancel-button:pressed {
+    -fx-background-color: #FF534d;
+}
+
+.save-button {
     -fx-text-fill: -fx-primary-blue;
     -fx-background-color: -fx-primary-gray;
     -fx-border-color: -fx-primary-blue;
     -fx-background-radius: 0;
 }
 
-.save-button:hover{
+.save-button:hover {
     -fx-background-color: -fx-secundary-gray;
 }
 
-.text{
+.save-button:pressed {
+    -fx-background-color: #f2f2f2;
+}
+
+.text {
     -fx-text-fill: -fx-primary-blue;
 }
 
-.title{
+.title {
     -fx-font-size: 25px;
     -fx-text-fill: -fx-primary-blue;
 }
 
-.purple-button{
+.purple-button {
     -fx-text-fill: black;
-    -fx-background-color: #E369AF;
-    -fx-border-color: -fx-primary-blue;
+    -fx-background-color: #7d30fa;
+    -fx-border-color: #808080;
     -fx-background-radius: 0;
     -fx-font-size: 25px;
 }
 
-.purple-button:hover{
-    -fx-text-fill: black;
-    -fx-background-color: #B258AE;
-    -fx-border-color: -fx-primary-blue;
-    -fx-background-radius: 0;
-    -fx-font-size: 25px;
+.purple-button:hover {
+    -fx-background-color: #8e41fb;
 }
 
-.dark-green-button{
+.purple-button:pressed {
+    -fx-background-color: #9f52fc;
+}
+
+.dark-green-button {
     -fx-text-fill: white;
     -fx-background-color: #12530B;
-    -fx-border-color: -fx-primary-blue;
+    -fx-border-color: #808080;
     -fx-background-radius: 0;
     -fx-font-size: 25px;
 }
 
-.dark-green-button:hover{
-    -fx-text-fill: white;
+.dark-green-button:hover {
     -fx-background-color: #23641c;
-    -fx-border-color: -fx-primary-blue;
-    -fx-background-radius: 0;
-    -fx-font-size: 25px;
 }
 
-.orange-button{
+.dark-green-button:pressed {
+    -fx-background-color: #34752d;
+}
+
+.orange-button {
     -fx-text-fill: black;
-    -fx-background-color: #fabf1e;
-    -fx-border-color: -fx-primary-blue;
+    -fx-background-color: #f8b53a;
+    -fx-border-color: #808080;
     -fx-background-radius: 0;
     -fx-font-size: 25px;
 }
 
-.orange-button:hover{
-    -fx-text-fill: black;
-    -fx-background-color: #fbc52d;
-    -fx-border-color: -fx-primary-blue;
-    -fx-background-radius: 0;
-    -fx-font-size: 25px;
+.orange-button:hover {
+    -fx-background-color: #f9c64b;
 }
 
-.light-green-button{
+.orange-button:pressed {
+    -fx-background-color: #fad75c;
+}
+
+.light-green-button {
     -fx-text-fill: black;
     -fx-background-color: #37D126;
-    -fx-border-color: -fx-primary-blue;
+    -fx-border-color: #808080;
     -fx-background-radius: 0;
     -fx-font-size: 25px;
 }
 
-.yellow-button{
+.light-green-button:hover {
+    -fx-background-color: #48e237;
+}
+
+.light-green-button:pressed {
+    -fx-background-color: #59f348;
+}
+
+.yellow-button {
     -fx-text-fill: black;
-    -fx-background-color: #D9EF16;
-    -fx-border-color: -fx-primary-blue;
+    -fx-background-color: #F5DE19;
+    -fx-border-color: #808080;
     -fx-background-radius: 0;
     -fx-font-size: 25px;
 }
 
-.blue-button{
+.yellow-button:hover {
+    -fx-background-color: #D6C100;
+}
+
+.yellow-button:pressed {
+    -fx-background-color: #e7d211;
+}
+
+.blue-button {
     -fx-text-fill: white;
-    -fx-background-color: #131C57;
-    -fx-border-color: -fx-primary-blue;
+    -fx-background-color: #00C0EB;
+    -fx-border-color: #808080;
     -fx-background-radius: 0;
     -fx-font-size: 25px;
 }
 
-.background-yellow{
-    -fx-background-color: #D9EF16;
+.blue-button:hover {
+    -fx-background-color: #0FB0D6;
 }
 
-.background-black{
-    -fx-background-color: #0C0C0B;
+.blue-button:pressed {
+    -fx-background-color: #1fc1e7;
 }
 
-.background-white{
+.background-yellow {
+    -fx-background-color: #F5DE19;
+}
+
+.background-black {
+    -fx-background-color: #140f07;
+}
+
+.background-white {
     -fx-background-color: #EFEFE3;
 }
 
-.background-blue{
-    -fx-background-color: #5FDBE1;
+.background-blue {
+    -fx-background-color: #00C0EB;
 }
