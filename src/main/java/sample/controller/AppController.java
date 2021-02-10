@@ -13,12 +13,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 import sample.dto.MenuItemDTO;
 import sample.dto.MenuItemTypeDTO;
 import sample.dto.OrderDTO;
 import sample.dto.OrderItemDTO;
+import sample.factory.PopupFactory;
 import sample.rest.MenuItemRestClient;
 import sample.rest.MenuItemTypeRestClient;
+import sample.rest.OrderItemRestClient;
 import sample.table.OrderTableModel;
 
 import java.io.IOException;
@@ -32,6 +35,7 @@ public class AppController implements Initializable {
 
     private final MenuItemTypeRestClient menuItemTypeRestClient;
     private final MenuItemRestClient menuItemRestClient;
+    private final OrderItemRestClient orderItemRestClient;
 
     private final ObservableList<OrderTableModel> data;
 
@@ -105,6 +109,7 @@ public class AppController implements Initializable {
         this.menuItemRestClient = new MenuItemRestClient();
         this.data = FXCollections.observableArrayList();
         this.order = new OrderDTO();
+        this.orderItemRestClient = new OrderItemRestClient();
     }
 
     @Override
@@ -113,6 +118,18 @@ public class AppController implements Initializable {
         initializeMenuItemTabPane();
         initializeOrderTableView();
         initializeRemoveButton();
+        initializesettlementButton();
+    }
+
+    private void initializesettlementButton() {
+        //TODO not finished yet
+        settlementButton.setOnAction(x -> {
+            Thread thread = new Thread(()->{
+                OrderItemDTO orderItemDTO = order.getOrderItems().get(0);
+                orderItemRestClient.saveOrderItem(orderItemDTO);
+            });
+            thread.start();
+        });
     }
 
     private void initializeRemoveButton() {
@@ -165,6 +182,11 @@ public class AppController implements Initializable {
         button.setPrefSize(275, 128);
         button.setTextAlignment(TextAlignment.CENTER);
         button.setFont(Font.font(18));
+        button.setStyle(getStyle());
+        button.setOnMouseEntered(x -> button.setStyle(getHoverStyle()));
+        button.setOnMouseExited(x -> button.setStyle(getStyle()));
+        button.setOnMousePressed(x -> button.setStyle(getPressedStyle()));
+        button.setOnMouseClicked(x -> button.setStyle(getHoverStyle()));
         button.setOnAction(x -> {
             if (order.isOrderNull()) {
                 OrderItemDTO orderItemDTO = new OrderItemDTO(item);
@@ -238,5 +260,36 @@ public class AppController implements Initializable {
             total += orderItem.getQuantity() * orderItem.getMenuItemDTO().getPrice();
         }
         return total;
+    }
+
+    private String getStyle() {
+        return ".light-green-button {\n" +
+                "-fx-text-fill: black;\n" +
+                "-fx-background-color: #37D126;\n" +
+                "-fx-border-color: #808080;\n" +
+                "-fx-background-radius: 0;\n" +
+                "-fx-font-size: 25px;}";
+    }
+
+    private String getHoverStyle() {
+        return ".light-green-button {\n" +
+                "-fx-text-fill: black;\n" +
+                "-fx-background-color: #48e237;\n" +
+                "-fx-border-color: #808080;\n" +
+                "-fx-background-radius: 0;\n" +
+                "-fx-font-size: 25px;}";
+    }
+
+    private String getPressedStyle() {
+        return ".light-green-button {\n" +
+                "-fx-text-fill: black;\n" +
+                "-fx-background-color: #59f348;\n" +
+                "-fx-border-color: #808080;\n" +
+                "-fx-background-radius: 0;\n" +
+                "-fx-font-size: 25px;}";
+    }
+
+    private Stage getStage() {
+        return (Stage) menuPane.getScene().getWindow();
     }
 }
