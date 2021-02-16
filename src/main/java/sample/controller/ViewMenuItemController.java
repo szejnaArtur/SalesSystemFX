@@ -60,7 +60,7 @@ public class ViewMenuItemController implements Initializable {
                 nameTextField.setText(dto.getName());
                 priceTextField.setText(Double.toString(dto.getPrice()));
                 kcalTextField.setText(Integer.toString(dto.getKcal()));
-                typeTextField.setText(dto.getType());
+                typeTextField.setText(dto.getType().getName());
                 descriptionTextField.setText(dto.getDescription());
                 handler.handle();
             });

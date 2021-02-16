@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Data
-public class OrderDTO {
+public class OrderBillDTO {
 
     private Long idOrder;
     private List<OrderItemDTO> orderItems = new ArrayList<>();

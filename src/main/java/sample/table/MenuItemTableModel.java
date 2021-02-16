@@ -2,6 +2,7 @@ package sample.table;
 
 import javafx.beans.property.SimpleStringProperty;
 import sample.dto.MenuItemDTO;
+import sample.dto.MenuItemTypeDTO;
 
 public class MenuItemTableModel {
 
@@ -11,10 +12,10 @@ public class MenuItemTableModel {
     private final SimpleStringProperty kcal;
     private final SimpleStringProperty type;
 
-    public MenuItemTableModel(Long idMenuItem, String name, Double price, Integer kcal, String type){
+    public MenuItemTableModel(Long idMenuItem, String name, Double price, Integer kcal, MenuItemTypeDTO type){
         this.idMenuItem = idMenuItem;
         this.name = new SimpleStringProperty(name);
-        this.type = new SimpleStringProperty(type);
+        this.type = new SimpleStringProperty(type.getName());
         this.price = new SimpleStringProperty(price.toString());
         this.kcal = new SimpleStringProperty(kcal.toString());
     }

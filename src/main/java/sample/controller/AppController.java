@@ -16,16 +16,16 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import sample.dto.MenuItemDTO;
 import sample.dto.MenuItemTypeDTO;
-import sample.dto.OrderDTO;
+import sample.dto.OrderBillDTO;
 import sample.dto.OrderItemDTO;
-import sample.factory.PopupFactory;
 import sample.rest.MenuItemRestClient;
 import sample.rest.MenuItemTypeRestClient;
-import sample.rest.OrderItemRestClient;
+import sample.rest.OrderRestClient;
 import sample.table.OrderTableModel;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,11 +35,11 @@ public class AppController implements Initializable {
 
     private final MenuItemTypeRestClient menuItemTypeRestClient;
     private final MenuItemRestClient menuItemRestClient;
-    private final OrderItemRestClient orderItemRestClient;
+    private final OrderRestClient orderRestClient;
 
     private final ObservableList<OrderTableModel> data;
 
-    private final OrderDTO order;
+    private final OrderBillDTO order;
 
     @FXML
     private Pane menuPane;
@@ -108,8 +108,8 @@ public class AppController implements Initializable {
         this.menuItemTypeRestClient = new MenuItemTypeRestClient();
         this.menuItemRestClient = new MenuItemRestClient();
         this.data = FXCollections.observableArrayList();
-        this.order = new OrderDTO();
-        this.orderItemRestClient = new OrderItemRestClient();
+        this.order = new OrderBillDTO();
+        this.orderRestClient = new OrderRestClient();
     }
 
     @Override
@@ -119,15 +119,15 @@ public class AppController implements Initializable {
         initializeOrderTableView();
         initializeRemoveButton();
         initializesettlementButton();
+
     }
+
 
     private void initializesettlementButton() {
         //TODO not finished yet
         settlementButton.setOnAction(x -> {
-            Thread thread = new Thread(()->{
-                OrderItemDTO orderItemDTO = order.getOrderItems().get(0);
-                orderItemRestClient.saveOrderItem(orderItemDTO);
-            });
+            order.setOrderDate(LocalDateTime.now());
+            Thread thread = new Thread(()-> orderRestClient.saveOrderBill(order));
             thread.start();
         });
     }
@@ -153,7 +153,7 @@ public class AppController implements Initializable {
         }
 
         for (MenuItemDTO menuItem : menuItems) {
-            menu.get(menuItem.getType()).add(menuItem);
+            menu.get(menuItem.getType().getName()).add(menuItem);
         }
 
         for (MenuItemTypeDTO type : menuItemTypes) {

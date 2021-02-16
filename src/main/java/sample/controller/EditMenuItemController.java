@@ -8,9 +8,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import sample.dto.MenuItemDTO;
+import sample.dto.MenuItemTypeDTO;
 import sample.factory.PopupFactory;
 import sample.handler.MenuItemLoadedHandler;
 import sample.rest.MenuItemRestClient;
+import sample.rest.MenuItemTypeRestClient;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,6 +20,7 @@ import java.util.ResourceBundle;
 public class EditMenuItemController implements Initializable {
 
     private final MenuItemRestClient menuItemRestClient;
+    private final MenuItemTypeRestClient menuItemTypeRestClient;
     private final PopupFactory popupFactory;
 
     private Long idMenuItem;
@@ -49,6 +52,7 @@ public class EditMenuItemController implements Initializable {
     public EditMenuItemController() {
         menuItemRestClient = new MenuItemRestClient();
         popupFactory = new PopupFactory();
+        menuItemTypeRestClient = new MenuItemTypeRestClient();
     }
 
     @Override
@@ -80,7 +84,8 @@ public class EditMenuItemController implements Initializable {
         Integer kcal = Integer.valueOf(kcalTextField.getText());
         String type = typeTextField.getText();
         String descrition = descriptionTextField.getText();
-        MenuItemDTO dto = MenuItemDTO.of(name, price, kcal, type, descrition);
+        MenuItemTypeDTO menuItemType = menuItemTypeRestClient.getMenuItemType(type);
+        MenuItemDTO dto = MenuItemDTO.of(name, price, kcal, menuItemType, descrition);
         dto.setIdMenuItem(idMenuItem);
         return dto;
     }
@@ -93,7 +98,7 @@ public class EditMenuItemController implements Initializable {
                 nameTextField.setText(dto.getName());
                 priceTextField.setText(Double.toString(dto.getPrice()));
                 kcalTextField.setText(Integer.toString(dto.getKcal()));
-                typeTextField.setText(dto.getType());
+                typeTextField.setText(dto.getType().getName());
                 descriptionTextField.setText(dto.getDescription());
                 handler.handle();
             });

@@ -7,6 +7,7 @@ public class OrderItemDTO {
 
     private Long idOrderItem;
     private MenuItemDTO menuItemDTO;
+    private OrderBillDTO orderBillDTO;
     private Integer quantity;
 
     public OrderItemDTO(MenuItemDTO menuItemDTO) {

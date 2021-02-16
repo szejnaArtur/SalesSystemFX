@@ -7,8 +7,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import sample.dto.MenuItemDTO;
+import sample.dto.MenuItemTypeDTO;
 import sample.factory.PopupFactory;
 import sample.rest.MenuItemRestClient;
+import sample.rest.MenuItemTypeRestClient;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,6 +19,7 @@ public class AddMenuItemController implements Initializable {
 
     private final PopupFactory popupFactory;
     private final MenuItemRestClient menuItemRestClient;
+    private final MenuItemTypeRestClient menuItemTypeRestClient;
 
     @FXML
     private BorderPane addBorderPane;
@@ -42,6 +45,7 @@ public class AddMenuItemController implements Initializable {
     public AddMenuItemController(){
         this.popupFactory = new PopupFactory();
         this.menuItemRestClient = new MenuItemRestClient();
+        this.menuItemTypeRestClient = new MenuItemTypeRestClient();
     }
 
     @Override
@@ -69,8 +73,8 @@ public class AddMenuItemController implements Initializable {
         Double price = Double.valueOf(priceTextField.getText());
         Integer kcal = Integer.valueOf(kcalTextField.getText());
         String type = typeTextField.getText();
-
-        return MenuItemDTO.of(name, price, kcal, type);
+        MenuItemTypeDTO menuItemType = menuItemTypeRestClient.getMenuItemType(type);
+        return MenuItemDTO.of(name, price, kcal, menuItemType);
     }
 
     private void initializeCancelButton() {

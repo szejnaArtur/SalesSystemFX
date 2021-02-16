@@ -10,9 +10,9 @@ public class MenuItemDTO {
     private Double price;
     private Integer kcal;
     private String description;
-    private String type;
+    private MenuItemTypeDTO type;
 
-    public static MenuItemDTO of(String name, Double price, Integer kcal, String type){
+    public static MenuItemDTO of(String name, Double price, Integer kcal, MenuItemTypeDTO type){
         MenuItemDTO dto = new MenuItemDTO();
         dto.setName(name);
         dto.setPrice(price);
@@ -21,7 +21,7 @@ public class MenuItemDTO {
         return dto;
     }
 
-    public static MenuItemDTO of(String name, Double price, Integer kcal, String type, String description){
+    public static MenuItemDTO of(String name, Double price, Integer kcal, MenuItemTypeDTO type, String description){
         MenuItemDTO dto = new MenuItemDTO();
         dto.setName(name);
         dto.setPrice(price);
