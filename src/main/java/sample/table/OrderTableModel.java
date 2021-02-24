@@ -21,7 +21,7 @@ public class OrderTableModel {
     public static OrderTableModel of(OrderItemDTO orderItemDTO){
         return new OrderTableModel(orderItemDTO.getMenuItemDTO().getName(),
                 orderItemDTO.getMenuItemDTO().getPrice(),
-                orderItemDTO.getQuantity());
+                orderItemDTO.getAmount());
     }
 
     public String getItem() {

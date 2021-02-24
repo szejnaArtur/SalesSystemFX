@@ -6,16 +6,16 @@ import lombok.Data;
 public class OrderItemDTO {
 
     private Long idOrderItem;
+    private Integer amount;
     private MenuItemDTO menuItemDTO;
-    private OrderBillDTO orderBillDTO;
-    private Integer quantity;
+    private BillDTO billDTO;
 
     public OrderItemDTO(MenuItemDTO menuItemDTO) {
         this.menuItemDTO = menuItemDTO;
-        this.quantity = 1;
+        this.amount = 1;
     }
 
     public void increaseTheQuantity() {
-        setQuantity(getQuantity() + 1);
+        setAmount(getAmount() + 1);
     }
 }

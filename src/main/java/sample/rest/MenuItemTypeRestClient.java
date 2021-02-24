@@ -3,9 +3,7 @@ package sample.rest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import sample.dto.MenuItemDTO;
 import sample.dto.MenuItemTypeDTO;
-import sample.dto.WorkHoursDTO;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.Objects;
 
 public class MenuItemTypeRestClient {
 
-    private static final String GET_FIND_ALL_URL = "http://localhost:8080/menuItemType/findAll";
+    private static final String GET_FIND_ALL_URL = "http://localhost:8080/menuItemTypes/findAll";
     private static final String GET_FIND_BY_NAME_URL = "http://localhost:8080/menuItemType/findByName/";
 
     private final RestTemplate restTemplate;

@@ -16,11 +16,12 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import sample.dto.MenuItemDTO;
 import sample.dto.MenuItemTypeDTO;
-import sample.dto.OrderBillDTO;
+import sample.dto.BillDTO;
 import sample.dto.OrderItemDTO;
 import sample.rest.MenuItemRestClient;
 import sample.rest.MenuItemTypeRestClient;
 import sample.rest.OrderRestClient;
+import sample.table.MenuItemTableModel;
 import sample.table.OrderTableModel;
 
 import java.io.IOException;
@@ -39,7 +40,8 @@ public class AppController implements Initializable {
 
     private final ObservableList<OrderTableModel> data;
 
-    private final OrderBillDTO order;
+    private final BillDTO bill;
+    private final List<OrderItemDTO> orderItemDTOList;
 
     @FXML
     private Pane menuPane;
@@ -108,8 +110,10 @@ public class AppController implements Initializable {
         this.menuItemTypeRestClient = new MenuItemTypeRestClient();
         this.menuItemRestClient = new MenuItemRestClient();
         this.data = FXCollections.observableArrayList();
-        this.order = new OrderBillDTO();
+        this.bill = new BillDTO();
+        this.bill.setOrderDate(LocalDateTime.now());
         this.orderRestClient = new OrderRestClient();
+        this.orderItemDTOList = new ArrayList<>();
     }
 
     @Override
@@ -118,31 +122,33 @@ public class AppController implements Initializable {
         initializeMenuItemTabPane();
         initializeOrderTableView();
         initializeRemoveButton();
-        initializesettlementButton();
-
-    }
-
-
-    private void initializesettlementButton() {
-        //TODO not finished yet
-        settlementButton.setOnAction(x -> {
-            order.setOrderDate(LocalDateTime.now());
-            Thread thread = new Thread(()-> orderRestClient.saveOrderBill(order));
-            thread.start();
-        });
+//        initializesettlementButton();
     }
 
     private void initializeRemoveButton() {
         removeButton.setOnAction(x -> {
-            OrderTableModel selectedOrderItem = orderTableView.getSelectionModel().getSelectedItem();
-            if (selectedOrderItem != null) {
-                OrderItemDTO orderItem = order.findOrderItemByName(selectedOrderItem.getItem());
-                order.removeOrderItem(orderItem);
-                loadMenuOrderData();
-                totalLabel.setText(String.format("Total: %.2f PLN", getTotalPrice()));
+            OrderTableModel selectedItem = orderTableView.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                OrderItemDTO orderItemDTO;
+                for (OrderItemDTO dto : orderItemDTOList) {
+                    if (dto.getMenuItemDTO().getName().equals(selectedItem.getItem())){
+                        orderItemDTOList.remove(dto);
+                        loadMenuOrderData();
+                        totalLabel.setText(String.format("Total: %.2f PLN", getTotalPrice()));
+                        break;
+                    }
+                }
             }
         });
     }
+
+
+//    private void initializesettlementButton() {
+//        //TODO not finished yet
+//        settlementButton.setOnAction(x -> {
+//
+//        });
+//    }
 
     private void initializeMenuItemTabPane() {
         List<MenuItemTypeDTO> menuItemTypes = menuItemTypeRestClient.getMenuItemTypes();
@@ -188,19 +194,21 @@ public class AppController implements Initializable {
         button.setOnMousePressed(x -> button.setStyle(getPressedStyle()));
         button.setOnMouseClicked(x -> button.setStyle(getHoverStyle()));
         button.setOnAction(x -> {
-            if (order.isOrderNull()) {
+            if (orderItemDTOList.size() == 0) {
                 OrderItemDTO orderItemDTO = new OrderItemDTO(item);
-                order.addOrderItemToOrder(orderItemDTO);
+                orderItemDTO.setBillDTO(bill);
+                orderItemDTOList.add(orderItemDTO);
             } else {
-                if (order.isOrderItem(item)) {
-                    for (OrderItemDTO orderItemDTO : order.getOrderItems()) {
+                if (isOrderItem(item)) {
+                    for (OrderItemDTO orderItemDTO : orderItemDTOList) {
                         if (orderItemDTO.getMenuItemDTO().getName().equals(item.getName())) {
                             orderItemDTO.increaseTheQuantity();
                         }
                     }
                 } else {
                     OrderItemDTO orderItemDTO = new OrderItemDTO(item);
-                    order.addOrderItemToOrder(orderItemDTO);
+                    orderItemDTO.setBillDTO(bill);
+                    orderItemDTOList.add(orderItemDTO);
                 }
             }
 
@@ -238,9 +246,8 @@ public class AppController implements Initializable {
 
     private void loadMenuOrderData() {
         Thread thread = new Thread(() -> {
-            List<OrderItemDTO> orderItem = order.getOrderItems();
             data.clear();
-            data.addAll(orderItem.stream().map(OrderTableModel::of).collect(Collectors.toList()));
+            data.addAll(orderItemDTOList.stream().map(OrderTableModel::of).collect(Collectors.toList()));
         });
         thread.start();
     }
@@ -256,8 +263,8 @@ public class AppController implements Initializable {
 
     private Double getTotalPrice() {
         double total = 0.0;
-        for (OrderItemDTO orderItem : order.getOrderItems()) {
-            total += orderItem.getQuantity() * orderItem.getMenuItemDTO().getPrice();
+        for (OrderItemDTO orderItem : orderItemDTOList) {
+            total += orderItem.getAmount() * orderItem.getMenuItemDTO().getPrice();
         }
         return total;
     }
@@ -291,5 +298,14 @@ public class AppController implements Initializable {
 
     private Stage getStage() {
         return (Stage) menuPane.getScene().getWindow();
+    }
+
+    private Boolean isOrderItem(MenuItemDTO item) {
+        for (OrderItemDTO dto : orderItemDTOList) {
+            if (dto.getMenuItemDTO().getName().equals(item.getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
