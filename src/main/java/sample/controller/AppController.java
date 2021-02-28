@@ -5,6 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -14,14 +16,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import sample.dto.BillDTO;
 import sample.dto.MenuItemDTO;
 import sample.dto.MenuItemTypeDTO;
-import sample.dto.BillDTO;
 import sample.dto.OrderItemDTO;
+import sample.factory.PopupFactory;
 import sample.rest.MenuItemRestClient;
 import sample.rest.MenuItemTypeRestClient;
-import sample.rest.OrderRestClient;
-import sample.table.MenuItemTableModel;
+import sample.rest.OrderItemRestClient;
 import sample.table.OrderTableModel;
 
 import java.io.IOException;
@@ -32,16 +34,19 @@ import java.util.stream.Collectors;
 
 public class AppController implements Initializable {
 
+    private static final String APP_TITLE = "POS Restaurant System";
+    private final static String RESTAURANT_PANEL_FXML = "/fxml/restaurantPanel.fxml";
     private final static String MENUITEM_FXML = "/fxml/menuItem.fxml";
 
     private final MenuItemTypeRestClient menuItemTypeRestClient;
     private final MenuItemRestClient menuItemRestClient;
-    private final OrderRestClient orderRestClient;
+    private final OrderItemRestClient orderItemRestClient;
 
     private final ObservableList<OrderTableModel> data;
 
     private final BillDTO bill;
     private final List<OrderItemDTO> orderItemDTOList;
+    private final PopupFactory popupFactory;
 
     @FXML
     private Pane menuPane;
@@ -112,8 +117,9 @@ public class AppController implements Initializable {
         this.data = FXCollections.observableArrayList();
         this.bill = new BillDTO();
         this.bill.setOrderDate(LocalDateTime.now());
-        this.orderRestClient = new OrderRestClient();
         this.orderItemDTOList = new ArrayList<>();
+        this.orderItemRestClient = new OrderItemRestClient();
+        this.popupFactory = new PopupFactory();
     }
 
     @Override
@@ -122,7 +128,7 @@ public class AppController implements Initializable {
         initializeMenuItemTabPane();
         initializeOrderTableView();
         initializeRemoveButton();
-//        initializesettlementButton();
+        initializesettlementButton();
     }
 
     private void initializeRemoveButton() {
@@ -142,13 +148,17 @@ public class AppController implements Initializable {
         });
     }
 
-
-//    private void initializesettlementButton() {
-//        //TODO not finished yet
-//        settlementButton.setOnAction(x -> {
-//
-//        });
-//    }
+    private void initializesettlementButton() {
+        settlementButton.setOnAction(x -> {
+            if(orderItemDTOList.size() > 0 ){
+                orderItemRestClient.saveOrderItems(orderItemDTOList);
+                openStartPanelAndCloseRestaurantPanel();
+            } else {
+                Stage infoPopup = popupFactory.createInfoPopup("The order is empty.");
+                infoPopup.show();
+            }
+        });
+    }
 
     private void initializeMenuItemTabPane() {
         List<MenuItemTypeDTO> menuItemTypes = menuItemTypeRestClient.getMenuItemTypes();
@@ -307,5 +317,20 @@ public class AppController implements Initializable {
             }
         }
         return false;
+    }
+
+    private void openStartPanelAndCloseRestaurantPanel() {
+        try {
+            Stage startPanelStage = new Stage();
+            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(RESTAURANT_PANEL_FXML));
+            Scene scene = new Scene(startPanelRoot, 1920, 1000);
+            startPanelStage.setTitle(APP_TITLE);
+            startPanelStage.setFullScreen(true);
+            startPanelStage.setScene(scene);
+            startPanelStage.show();
+            getStage().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

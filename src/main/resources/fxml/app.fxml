@@ -14,10 +14,6 @@
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.AppController">
   <tabs>
-    <Tab text="Menu">
-         <content>
-            <Pane fx:id="menuPane" prefHeight="200.0" prefWidth="200.0" />
-         </content></Tab>
     <Tab text="Orders">
          <content>
             <VBox prefHeight="200.0" prefWidth="100.0">
@@ -157,6 +153,10 @@
             </VBox>
          </content>
     </Tab>
+    <Tab text="Menu">
+         <content>
+            <Pane fx:id="menuPane" prefHeight="200.0" prefWidth="200.0" />
+         </content></Tab>
       <Tab text="Settings" />
   </tabs>
    <stylesheets>
