@@ -96,7 +96,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="purple-button" text="AGC">
+                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="purple-button" text="AGC TDY">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="10.0" right="5.0" top="10.0" />
                            </GridPane.margin>
@@ -104,7 +104,7 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="500.0" prefWidth="500.0" styleClass="purple-button" text="MPT" GridPane.rowIndex="1">
+                        <Button mnemonicParsing="false" prefHeight="500.0" prefWidth="500.0" styleClass="purple-button" text="MPT TDY" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="10.0" left="10.0" right="5.0" top="5.0" />
                            </GridPane.margin>
@@ -152,7 +152,7 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="purple-button" text="UPSELL" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="purple-button" text="UPSELL TDY" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                            </GridPane.margin>

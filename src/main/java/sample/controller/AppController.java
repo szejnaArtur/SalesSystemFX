@@ -117,6 +117,7 @@ public class AppController implements Initializable {
         this.data = FXCollections.observableArrayList();
         this.bill = new BillDTO();
         this.bill.setOrderDate(LocalDateTime.now());
+        this.bill.setEmployeeDTO(StartController.employeeDTO);
         this.orderItemDTOList = new ArrayList<>();
         this.orderItemRestClient = new OrderItemRestClient();
         this.popupFactory = new PopupFactory();
@@ -153,6 +154,8 @@ public class AppController implements Initializable {
             if(orderItemDTOList.size() > 0 ){
                 orderItemRestClient.saveOrderItems(orderItemDTOList);
                 openStartPanelAndCloseRestaurantPanel();
+                Stage infoPopup = popupFactory.createInfoPopup("The order has been registered.");
+                infoPopup.show();
             } else {
                 Stage infoPopup = popupFactory.createInfoPopup("The order is empty.");
                 infoPopup.show();
