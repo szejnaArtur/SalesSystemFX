@@ -3,12 +3,15 @@ package sample.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.dto.EmployeeDTO;
+import sample.rest.AverageGuestCheckRestClient;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,6 +21,9 @@ public class RestaurantPanelController implements Initializable {
 
     private static final String APP_FXML = "/fxml/app.fxml";
     private static final String STARTPANEL_FXML = "/fxml/startPanel.fxml";
+    private static final String AGC_RAPORT_FXML = "/fxml/AGCRaport.fxml";
+
+    private final AverageGuestCheckRestClient averageGuestCheckRestClient;
 
     @FXML
     private Pane restaurantPanelPane;
@@ -31,17 +37,41 @@ public class RestaurantPanelController implements Initializable {
     @FXML
     private TextField loggedTextField;
 
+    @FXML
+    private Button AGCButton;
+
+    public RestaurantPanelController() {
+        this.averageGuestCheckRestClient = new AverageGuestCheckRestClient();
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeOrderButton();
         initializeLogoutButton();
         initializeLoggedTextField();
+        initializeAGCButton();
+    }
+
+    private void initializeAGCButton() {
+        AGCButton.setOnAction(x -> {
+            Stage agcRaportStage = new Stage();
+//            agcStage.initStyle(StageStyle.UNDECORATED);
+            agcRaportStage.initModality(Modality.APPLICATION_MODAL);
+            try {
+                Parent addAGCRaportParent = FXMLLoader.load(getClass().getResource(AGC_RAPORT_FXML));
+                Scene scene = new Scene(addAGCRaportParent, 1280, 800);
+                agcRaportStage.setScene(scene);
+                agcRaportStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void initializeLoggedTextField() {
         String firstName = StartController.employeeDTO.getFirstName();
         String lastName = StartController.employeeDTO.getLastName();
-        if(firstName != null){
+        if (firstName != null) {
             loggedTextField.setText(firstName + " " + lastName);
         }
     }
