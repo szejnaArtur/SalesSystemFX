@@ -15,7 +15,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import sample.dto.BillDTO;
 import sample.dto.MenuItemDTO;
 import sample.dto.MenuItemTypeDTO;
@@ -37,16 +39,15 @@ public class AppController implements Initializable {
     private static final String APP_TITLE = "POS Restaurant System";
     private final static String RESTAURANT_PANEL_FXML = "/fxml/restaurantPanel.fxml";
     private final static String MENUITEM_FXML = "/fxml/menuItem.fxml";
+    private final static String SETTLEMENT_FXML = "/fxml/settlementPanel.fxml";
 
     private final MenuItemTypeRestClient menuItemTypeRestClient;
     private final MenuItemRestClient menuItemRestClient;
-    private final OrderItemRestClient orderItemRestClient;
 
     private final ObservableList<OrderTableModel> data;
 
     private final BillDTO bill;
     private final List<OrderItemDTO> orderItemDTOList;
-    private final PopupFactory popupFactory;
 
     @FXML
     private Pane menuPane;
@@ -119,8 +120,8 @@ public class AppController implements Initializable {
         this.bill.setOrderDate(LocalDateTime.now());
         this.bill.setEmployeeDTO(StartController.employeeDTO);
         this.orderItemDTOList = new ArrayList<>();
-        this.orderItemRestClient = new OrderItemRestClient();
-        this.popupFactory = new PopupFactory();
+        OrderItemRestClient orderItemRestClient = new OrderItemRestClient();
+        PopupFactory popupFactory = new PopupFactory();
     }
 
     @Override
@@ -151,15 +152,29 @@ public class AppController implements Initializable {
 
     private void initializesettlementButton() {
         settlementButton.setOnAction(x -> {
-            if(orderItemDTOList.size() > 0 ){
-                orderItemRestClient.saveOrderItems(orderItemDTOList);
-                openStartPanelAndCloseRestaurantPanel();
-                Stage infoPopup = popupFactory.createInfoPopup("The order has been registered.");
-                infoPopup.show();
-            } else {
-                Stage infoPopup = popupFactory.createInfoPopup("The order is empty.");
-                infoPopup.show();
+            Stage settlementStage = new Stage();
+            settlementStage.initStyle(StageStyle.UNDECORATED);
+            settlementStage.initModality(Modality.APPLICATION_MODAL);
+            try {
+                Parent addAGCRaportParent = FXMLLoader.load(getClass().getResource(SETTLEMENT_FXML));
+                Scene scene = new Scene(addAGCRaportParent, 1400, 1000);
+                settlementStage.setScene(scene);
+                settlementStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
+
+
+//            if(orderItemDTOList.size() > 0 ){
+//                orderItemRestClient.saveOrderItems(orderItemDTOList);
+//                openStartPanelAndCloseRestaurantPanel();
+//                Stage infoPopup = popupFactory.createInfoPopup("The order has been registered.");
+//                infoPopup.show();
+//            } else {
+//                Stage infoPopup = popupFactory.createInfoPopup("The order is empty.");
+//                infoPopup.show();
+//            }
         });
     }
 
