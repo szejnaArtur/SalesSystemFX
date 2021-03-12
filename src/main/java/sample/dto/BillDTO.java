@@ -11,5 +11,6 @@ public class BillDTO {
     private LocalDateTime orderDate;
     private LocalDateTime pickUpDate;
     private EmployeeDTO employeeDTO;
+    private String paymentMethod;
 
 }

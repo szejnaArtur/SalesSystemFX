@@ -23,8 +23,6 @@ public class RestaurantPanelController implements Initializable {
     private static final String STARTPANEL_FXML = "/fxml/startPanel.fxml";
     private static final String AGC_RAPORT_FXML = "/fxml/AGCRaport.fxml";
 
-    private final AverageGuestCheckRestClient averageGuestCheckRestClient;
-
     @FXML
     private Pane restaurantPanelPane;
 
@@ -41,7 +39,7 @@ public class RestaurantPanelController implements Initializable {
     private Button AGCButton;
 
     public RestaurantPanelController() {
-        this.averageGuestCheckRestClient = new AverageGuestCheckRestClient();
+        AverageGuestCheckRestClient averageGuestCheckRestClient = new AverageGuestCheckRestClient();
     }
 
     @Override
@@ -55,7 +53,6 @@ public class RestaurantPanelController implements Initializable {
     private void initializeAGCButton() {
         AGCButton.setOnAction(x -> {
             Stage agcRaportStage = new Stage();
-//            agcStage.initStyle(StageStyle.UNDECORATED);
             agcRaportStage.initModality(Modality.APPLICATION_MODAL);
             try {
                 Parent addAGCRaportParent = FXMLLoader.load(getClass().getResource(AGC_RAPORT_FXML));

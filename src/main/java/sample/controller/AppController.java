@@ -45,9 +45,7 @@ public class AppController implements Initializable {
     private final MenuItemRestClient menuItemRestClient;
 
     private final ObservableList<OrderTableModel> data;
-
-    private final BillDTO bill;
-    private final List<OrderItemDTO> orderItemDTOList;
+    private final PopupFactory popupFactory;
 
     @FXML
     private Pane menuPane;
@@ -116,12 +114,12 @@ public class AppController implements Initializable {
         this.menuItemTypeRestClient = new MenuItemTypeRestClient();
         this.menuItemRestClient = new MenuItemRestClient();
         this.data = FXCollections.observableArrayList();
-        this.bill = new BillDTO();
-        this.bill.setOrderDate(LocalDateTime.now());
-        this.bill.setEmployeeDTO(StartController.employeeDTO);
-        this.orderItemDTOList = new ArrayList<>();
+        StartController.bill = new BillDTO();
+        StartController.bill.setOrderDate(LocalDateTime.now());
+        StartController.bill.setEmployeeDTO(StartController.employeeDTO);
+        StartController.orderItemDTOList = new ArrayList<>();
         OrderItemRestClient orderItemRestClient = new OrderItemRestClient();
-        PopupFactory popupFactory = new PopupFactory();
+        this.popupFactory = new PopupFactory();
     }
 
     @Override
@@ -138,11 +136,11 @@ public class AppController implements Initializable {
             OrderTableModel selectedItem = orderTableView.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
                 OrderItemDTO orderItemDTO;
-                for (OrderItemDTO dto : orderItemDTOList) {
-                    if (dto.getMenuItemDTO().getName().equals(selectedItem.getItem())){
-                        orderItemDTOList.remove(dto);
+                for (OrderItemDTO dto : StartController.orderItemDTOList) {
+                    if (dto.getMenuItemDTO().getName().equals(selectedItem.getItem())) {
+                        StartController.orderItemDTOList.remove(dto);
                         loadMenuOrderData();
-                        totalLabel.setText(String.format("Total: %.2f PLN", getTotalPrice()));
+                        totalLabel.setText(String.format("Total: %.2f PLN", StartController.getTotalPrice()));
                         break;
                     }
                 }
@@ -152,29 +150,27 @@ public class AppController implements Initializable {
 
     private void initializesettlementButton() {
         settlementButton.setOnAction(x -> {
-            Stage settlementStage = new Stage();
-            settlementStage.initStyle(StageStyle.UNDECORATED);
-            settlementStage.initModality(Modality.APPLICATION_MODAL);
-            try {
-                Parent addAGCRaportParent = FXMLLoader.load(getClass().getResource(SETTLEMENT_FXML));
-                Scene scene = new Scene(addAGCRaportParent, 1400, 1000);
-                settlementStage.setScene(scene);
-                settlementStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (StartController.orderItemDTOList.size() > 0) {
+                Stage settlementStage = new Stage();
+                settlementStage.initStyle(StageStyle.UNDECORATED);
+                settlementStage.initModality(Modality.APPLICATION_MODAL);
+                try {
+                    Parent addAGCRaportParent = FXMLLoader.load(getClass().getResource(SETTLEMENT_FXML));
+                    Scene scene = new Scene(addAGCRaportParent, 1400, 1000);
+                    settlementStage.setScene(scene);
+                    settlementStage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Stage infoPopup = popupFactory.createInfoPopup("The order is empty.");
+                infoPopup.show();
             }
 
-
-
-//            if(orderItemDTOList.size() > 0 ){
 //                orderItemRestClient.saveOrderItems(orderItemDTOList);
 //                openStartPanelAndCloseRestaurantPanel();
 //                Stage infoPopup = popupFactory.createInfoPopup("The order has been registered.");
 //                infoPopup.show();
-//            } else {
-//                Stage infoPopup = popupFactory.createInfoPopup("The order is empty.");
-//                infoPopup.show();
-//            }
         });
     }
 
@@ -222,26 +218,26 @@ public class AppController implements Initializable {
         button.setOnMousePressed(x -> button.setStyle(getPressedStyle()));
         button.setOnMouseClicked(x -> button.setStyle(getHoverStyle()));
         button.setOnAction(x -> {
-            if (orderItemDTOList.size() == 0) {
+            if (StartController.orderItemDTOList.size() == 0) {
                 OrderItemDTO orderItemDTO = new OrderItemDTO(item);
-                orderItemDTO.setBillDTO(bill);
-                orderItemDTOList.add(orderItemDTO);
+                orderItemDTO.setBillDTO(StartController.bill);
+                StartController.orderItemDTOList.add(orderItemDTO);
             } else {
                 if (isOrderItem(item)) {
-                    for (OrderItemDTO orderItemDTO : orderItemDTOList) {
+                    for (OrderItemDTO orderItemDTO : StartController.orderItemDTOList) {
                         if (orderItemDTO.getMenuItemDTO().getName().equals(item.getName())) {
                             orderItemDTO.increaseTheQuantity();
                         }
                     }
                 } else {
                     OrderItemDTO orderItemDTO = new OrderItemDTO(item);
-                    orderItemDTO.setBillDTO(bill);
-                    orderItemDTOList.add(orderItemDTO);
+                    orderItemDTO.setBillDTO(StartController.bill);
+                    StartController.orderItemDTOList.add(orderItemDTO);
                 }
             }
 
             loadMenuOrderData();
-            totalLabel.setText(String.format("Total: %.2f PLN", getTotalPrice()));
+            totalLabel.setText(String.format("Total: %.2f PLN", StartController.getTotalPrice()));
         });
         return button;
     }
@@ -275,7 +271,7 @@ public class AppController implements Initializable {
     private void loadMenuOrderData() {
         Thread thread = new Thread(() -> {
             data.clear();
-            data.addAll(orderItemDTOList.stream().map(OrderTableModel::of).collect(Collectors.toList()));
+            data.addAll(StartController.orderItemDTOList.stream().map(OrderTableModel::of).collect(Collectors.toList()));
         });
         thread.start();
     }
@@ -287,14 +283,6 @@ public class AppController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private Double getTotalPrice() {
-        double total = 0.0;
-        for (OrderItemDTO orderItem : orderItemDTOList) {
-            total += orderItem.getAmount() * orderItem.getMenuItemDTO().getPrice();
-        }
-        return total;
     }
 
     private String getStyle() {
@@ -329,7 +317,7 @@ public class AppController implements Initializable {
     }
 
     private Boolean isOrderItem(MenuItemDTO item) {
-        for (OrderItemDTO dto : orderItemDTOList) {
+        for (OrderItemDTO dto : StartController.orderItemDTOList) {
             if (dto.getMenuItemDTO().getName().equals(item.getName())) {
                 return true;
             }
