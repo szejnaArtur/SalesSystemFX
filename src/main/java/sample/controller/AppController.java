@@ -36,8 +36,6 @@ import java.util.stream.Collectors;
 
 public class AppController implements Initializable {
 
-    private static final String APP_TITLE = "POS Restaurant System";
-    private final static String RESTAURANT_PANEL_FXML = "/fxml/restaurantPanel.fxml";
     private final static String MENUITEM_FXML = "/fxml/menuItem.fxml";
     private final static String SETTLEMENT_FXML = "/fxml/settlementPanel.fxml";
 
@@ -156,9 +154,10 @@ public class AppController implements Initializable {
                 settlementStage.initModality(Modality.APPLICATION_MODAL);
                 try {
                     Parent addAGCRaportParent = FXMLLoader.load(getClass().getResource(SETTLEMENT_FXML));
-                    Scene scene = new Scene(addAGCRaportParent, 1400, 1000);
+                    Scene scene = new Scene(addAGCRaportParent, 1920, 1080);
                     settlementStage.setScene(scene);
                     settlementStage.show();
+                    getStage().close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -323,20 +322,5 @@ public class AppController implements Initializable {
             }
         }
         return false;
-    }
-
-    private void openStartPanelAndCloseRestaurantPanel() {
-        try {
-            Stage startPanelStage = new Stage();
-            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(RESTAURANT_PANEL_FXML));
-            Scene scene = new Scene(startPanelRoot, 1920, 1000);
-            startPanelStage.setTitle(APP_TITLE);
-            startPanelStage.setFullScreen(true);
-            startPanelStage.setScene(scene);
-            startPanelStage.show();
-            getStage().close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

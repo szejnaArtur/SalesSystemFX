@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
-    private static final String START_PANEL_FXML = "/fxml/startPanel.fxml";
+    private static final String APLICATION_PANEL_FXML = "/fxml/aplicationPanel.fxml";
     private static final String APP_TITLE = "POS Restaurant System";
 
     private final PopupFactory popupFactory;
@@ -73,7 +73,7 @@ public class LoginController implements Initializable {
                     waitingPopup.close();
                     if (authenticationResult.isAuthenticated()) {
                         StartController.menuItemsDTO.addAll(menuItemRestClient.getMenuItems());
-                        openStartPanelAndCloseLoginStage();
+                        openApplicationPanelAndCloseLoginStage();
                     } else {
                         showIncorrectCredentialsMessage();
                     }
@@ -85,10 +85,10 @@ public class LoginController implements Initializable {
         System.out.println("Incorrect credentials");
     }
 
-    private void openStartPanelAndCloseLoginStage() {
+    private void openApplicationPanelAndCloseLoginStage() {
         try {
             Stage startPanelStage = new Stage();
-            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(START_PANEL_FXML));
+            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(APLICATION_PANEL_FXML));
             Scene scene = new Scene(startPanelRoot, 1920, 1000);
             startPanelStage.setTitle(APP_TITLE);
             startPanelStage.setFullScreen(true);

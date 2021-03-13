@@ -1,7 +1,10 @@
 package sample.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -11,10 +14,14 @@ import javafx.stage.Stage;
 import sample.factory.PopupFactory;
 import sample.rest.OrderItemRestClient;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SettlementController implements Initializable {
+
+    private final static String RESTAURANT_PANEL_FXML = "/fxml/restaurantPanel.fxml";
+    private static final String APP_TITLE = "POS Restaurant System";
 
     private String amount = "";
     private double paid = 0;
@@ -159,9 +166,11 @@ public class SettlementController implements Initializable {
                     restLabel.setText(String.format("Rest: %.2f PLN", rest));
                     StartController.bill.setPaymentMethod("CASH");
                     orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
-                    Stage infoPopup = popupFactory.createInfoPopup("Spend the rest: "+ rest);
+                    Stage infoPopup = popupFactory.createInfoPopup(String.format("Spend the rest: %.2f PLN", rest), ()->{
+                        getStage().close();
+                        openStartPanelAndCloseRestaurantPanel();
+                    });
                     infoPopup.show();
-                    getStage().close();
                 }
             }
         });
@@ -261,6 +270,21 @@ public class SettlementController implements Initializable {
 
     private void initializeReturnButton() {
         closeButton.setOnAction(x -> getStage().close());
+    }
+
+    private void openStartPanelAndCloseRestaurantPanel() {
+        try {
+            Stage startPanelStage = new Stage();
+            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(RESTAURANT_PANEL_FXML));
+            Scene scene = new Scene(startPanelRoot, 1920, 1000);
+            startPanelStage.setTitle(APP_TITLE);
+            startPanelStage.setFullScreen(true);
+            startPanelStage.setScene(scene);
+            startPanelStage.show();
+            getStage().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private Stage getStage() {

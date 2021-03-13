@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="settlementBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1400.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.SettlementController">
+<BorderPane fx:id="settlementBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.SettlementController">
    <stylesheets>
       <URL value="@../css/global-colors.css" />
       <URL value="@../css/crude.css" />
@@ -43,7 +43,7 @@
             </VBox>
             <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="500.0">
                <children>
-                  <Button fx:id="texIDButton" alignment="CENTER" mnemonicParsing="false" prefHeight="118.0" prefWidth="456.0" styleClass="light-green-button" text="Tax ID / NIP">
+                  <Button fx:id="texIDButton" alignment="CENTER" mnemonicParsing="false" prefHeight="118.0" prefWidth="500.0" styleClass="light-green-button" text="Tax ID / NIP">
                      <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
@@ -58,6 +58,7 @@
                   </TextField>
                </children>
             </VBox>
+            <VBox prefHeight="200.0" prefWidth="500.0" />
             <VBox prefHeight="200.0" prefWidth="500.0">
                <children>
                   <Button fx:id="neighborButton" mnemonicParsing="false" prefHeight="200.0" prefWidth="500.0" styleClass="blue-button" text="10% for a neighbor">
@@ -81,7 +82,7 @@
       </HBox>
    </top>
    <left>
-      <VBox prefHeight="727.0" prefWidth="465.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="602.0" prefWidth="479.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="cashButton" mnemonicParsing="false" prefHeight="150.0" prefWidth="500.0" styleClass="dark-green-button" text="Cash">
                <VBox.margin>
@@ -104,7 +105,7 @@
    <center>
       <HBox prefHeight="627.0" prefWidth="500.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="200.0" prefWidth="225.0">
+            <VBox prefHeight="602.0" prefWidth="200.0">
                <children>
                   <Button fx:id="sevenButton" mnemonicParsing="false" prefHeight="120.0" prefWidth="200.0" styleClass="purple-button" text="7">
                      <VBox.margin>
@@ -128,7 +129,7 @@
                   </Button>
                </children>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="225.0">
+            <VBox prefHeight="200.0" prefWidth="200.0">
                <children>
                   <Button fx:id="eightButton" mnemonicParsing="false" prefHeight="120.0" prefWidth="200.0" styleClass="purple-button" text="8">
                      <VBox.margin>
@@ -152,7 +153,7 @@
                   </Button>
                </children>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="225.0">
+            <VBox prefHeight="200.0" prefWidth="200.0">
                <children>
                   <Button fx:id="nineButton" mnemonicParsing="false" prefHeight="120.0" prefWidth="200.0" styleClass="purple-button" text="9">
                      <VBox.margin>
@@ -180,7 +181,7 @@
       </HBox>
    </center>
    <right>
-      <VBox prefHeight="627.0" prefWidth="316.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="602.0" prefWidth="405.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="hundredButton" mnemonicParsing="false" prefHeight="120.0" prefWidth="400.0" styleClass="orange-button" text="100">
                <VBox.margin>

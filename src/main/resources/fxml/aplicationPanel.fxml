@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane fx:id="aplicationPanelPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background-black" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.AplicationPanelController">
+   <stylesheets>
+      <URL value="@../css/global-colors.css" />
+      <URL value="@../css/crude.css" />
+   </stylesheets>
+</Pane>
