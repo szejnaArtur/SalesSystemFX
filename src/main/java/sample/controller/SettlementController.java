@@ -10,7 +10,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import sample.factory.PopupFactory;
 import sample.rest.OrderItemRestClient;
 
@@ -21,6 +23,8 @@ import java.util.ResourceBundle;
 public class SettlementController implements Initializable {
 
     private final static String RESTAURANT_PANEL_FXML = "/fxml/restaurantPanel.fxml";
+    private static final String ORDER_PANEL_FXML = "/fxml/orderPanel.fxml";
+    private static final String TEXID_PANEL_FXML = "/fxml/texIDPanel.fxml";
     private static final String APP_TITLE = "POS Restaurant System";
 
     private String amount = "";
@@ -148,7 +152,66 @@ public class SettlementController implements Initializable {
         initializeDotButton();
         initializeClearButton();
         initializeCashButton();
+        initializeCardButton();
+        initializeEveryPennyButton();
+        initializetexIDButton();
+    }
 
+    private void initializetexIDButton() {
+        texIDButton.setOnAction(x -> {
+            try {
+                Stage startPanelStage = new Stage();
+                startPanelStage.initStyle(StageStyle.UNDECORATED);
+                startPanelStage.initModality(Modality.APPLICATION_MODAL);
+                Parent startPanelRoot = FXMLLoader.load(getClass().getResource(TEXID_PANEL_FXML));
+                Scene scene = new Scene(startPanelRoot, 550, 850);
+                startPanelStage.setTitle(APP_TITLE);
+                startPanelStage.setScene(scene);
+                startPanelStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void initializeEveryPennyButton() {
+        everyPennyButton.setOnAction(x -> {
+            Double totalPrice = StartController.getTotalPrice();
+            paidLabel.setText(String.format("Paid: %.2f PLN", totalPrice));
+            amount = "";
+            countTextField.setText(amount);
+            restLabel.setText(String.format("Rest: %.2f PLN", 0.0));
+            StartController.bill.setPaymentMethod("CASH");
+            Stage infoPopup = popupFactory.createInfoPopup("Close the drawer", () -> {
+                orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
+                getStage().close();
+                openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
+            });
+            infoPopup.show();
+        });
+    }
+
+    private void initializeCardButton() {
+        cardButton.setOnAction(x -> {
+            Double totalPrice = StartController.getTotalPrice();
+            paidLabel.setText(String.format("Paid: %.2f PLN", totalPrice));
+            StartController.bill.setPaymentMethod("CARD");
+            Stage infoPopup = popupFactory.createInfoPopup("Ask for card insertion ...", () -> {
+                if (totalPrice >= 100) {
+                    Stage pinPopup = popupFactory.createInfoPopup("Ask for a PIN code...", () -> {
+                        orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
+                        getStage().close();
+                        openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
+                    });
+                    pinPopup.show();
+                } else {
+                    orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
+                    getStage().close();
+                    openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
+                }
+            });
+            infoPopup.show();
+        });
     }
 
     private void initializeCashButton() {
@@ -165,10 +228,10 @@ public class SettlementController implements Initializable {
                     double rest = paid - totalPrice;
                     restLabel.setText(String.format("Rest: %.2f PLN", rest));
                     StartController.bill.setPaymentMethod("CASH");
-                    orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
-                    Stage infoPopup = popupFactory.createInfoPopup(String.format("Spend the rest: %.2f PLN", rest), ()->{
+                    Stage infoPopup = popupFactory.createInfoPopup(String.format("Spend the rest: %.2f PLN", rest), () -> {
+                        orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
                         getStage().close();
-                        openStartPanelAndCloseRestaurantPanel();
+                        openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
                     });
                     infoPopup.show();
                 }
@@ -269,13 +332,16 @@ public class SettlementController implements Initializable {
 
 
     private void initializeReturnButton() {
-        closeButton.setOnAction(x -> getStage().close());
+        closeButton.setOnAction(x -> {
+            openOtherStageAndCloseSettlementStage(ORDER_PANEL_FXML);
+            getStage().close();
+        });
     }
 
-    private void openStartPanelAndCloseRestaurantPanel() {
+    private void openOtherStageAndCloseSettlementStage(String FXML_NAME) {
         try {
             Stage startPanelStage = new Stage();
-            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(RESTAURANT_PANEL_FXML));
+            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(FXML_NAME));
             Scene scene = new Scene(startPanelRoot, 1920, 1000);
             startPanelStage.setTitle(APP_TITLE);
             startPanelStage.setFullScreen(true);

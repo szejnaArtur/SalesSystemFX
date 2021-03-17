@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class AppController implements Initializable {
+public class OrderController implements Initializable {
 
     private final static String MENUITEM_FXML = "/fxml/menuItem.fxml";
     private final static String SETTLEMENT_FXML = "/fxml/settlementPanel.fxml";
@@ -108,14 +108,10 @@ public class AppController implements Initializable {
     @FXML
     private Label totalLabel;
 
-    public AppController() {
+    public OrderController() {
         this.menuItemTypeRestClient = new MenuItemTypeRestClient();
         this.menuItemRestClient = new MenuItemRestClient();
         this.data = FXCollections.observableArrayList();
-        StartController.bill = new BillDTO();
-        StartController.bill.setOrderDate(LocalDateTime.now());
-        StartController.bill.setEmployeeDTO(StartController.employeeDTO);
-        StartController.orderItemDTOList = new ArrayList<>();
         OrderItemRestClient orderItemRestClient = new OrderItemRestClient();
         this.popupFactory = new PopupFactory();
     }

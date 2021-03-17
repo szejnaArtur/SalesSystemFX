@@ -12,5 +12,6 @@ public class BillDTO {
     private LocalDateTime pickUpDate;
     private EmployeeDTO employeeDTO;
     private String paymentMethod;
+    private Long texID;
 
 }

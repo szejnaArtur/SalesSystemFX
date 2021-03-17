@@ -10,17 +10,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sample.dto.BillDTO;
 import sample.dto.EmployeeDTO;
 import sample.rest.AverageGuestCheckRestClient;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class RestaurantPanelController implements Initializable {
 
-    private static final String APP_FXML = "/fxml/app.fxml";
-    private static final String STARTPANEL_FXML = "/fxml/startPanel.fxml";
+    private static final String ORDER_PANEL_FXML = "/fxml/orderPanel.fxml";
+    private static final String START_PANEL_FXML = "/fxml/startPanel.fxml";
     private static final String AGC_RAPORT_FXML = "/fxml/AGCRaport.fxml";
 
     @FXML
@@ -76,13 +79,19 @@ public class RestaurantPanelController implements Initializable {
     private void initializeLogoutButton() {
         logoutButton.setOnAction(x -> {
             StartController.employeeDTO = new EmployeeDTO();
-            openAppCloseStage(STARTPANEL_FXML, getStage());
+            openAppCloseStage(START_PANEL_FXML, getStage());
             getStage().close();
         });
     }
 
     private void initializeOrderButton() {
-        orderButton.setOnAction(x -> openAppCloseStage(APP_FXML, getStage()));
+        orderButton.setOnAction(x -> {
+            StartController.bill = new BillDTO();
+            StartController.bill.setOrderDate(LocalDateTime.now());
+            StartController.bill.setEmployeeDTO(StartController.employeeDTO);
+            StartController.orderItemDTOList = new ArrayList<>();
+            openAppCloseStage(ORDER_PANEL_FXML, getStage());
+        });
     }
 
     private void openAppCloseStage(String FXML_URL, Stage closeStage) {
