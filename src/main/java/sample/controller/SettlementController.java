@@ -5,9 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -15,10 +14,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sample.factory.PopupFactory;
 import sample.rest.OrderItemRestClient;
+import sample.table.OrderTableModel;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class SettlementController implements Initializable {
 
@@ -129,11 +130,13 @@ public class SettlementController implements Initializable {
     @FXML
     private Pane menuPane;
 
-    public SettlementController() {
-        popupFactory = new PopupFactory();
-        orderItemRestClient = new OrderItemRestClient();
-    }
+    @FXML
+    private TableView<OrderTableModel> orderTableView;
 
+    public SettlementController() {
+        this.popupFactory = new PopupFactory();
+        this.orderItemRestClient = new OrderItemRestClient();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -155,6 +158,7 @@ public class SettlementController implements Initializable {
         initializeCardButton();
         initializeEveryPennyButton();
         initializetexIDButton();
+        initializeOrderTableView();
     }
 
     private void initializetexIDButton() {
@@ -351,6 +355,40 @@ public class SettlementController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initializeOrderTableView() {
+        orderTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TableColumn nameColumn = new TableColumn("Name");
+        nameColumn.setMinWidth(250);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, String>("item"));
+
+        TableColumn quantityColumn = new TableColumn("Quantity");
+        quantityColumn.setMinWidth(100);
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, Integer>("quantity"));
+
+        TableColumn priceColumn = new TableColumn("Price");
+        priceColumn.setMinWidth(100);
+        priceColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, Double>("price"));
+
+        TableColumn totalColumn = new TableColumn("Total");
+        totalColumn.setMinWidth(100);
+        totalColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, Double>("total"));
+
+        orderTableView.getColumns().addAll(nameColumn, quantityColumn, priceColumn, totalColumn);
+
+        loadMenuOrderData();
+
+        orderTableView.setItems(StartController.data);
+    }
+
+    private void loadMenuOrderData() {
+        Thread thread = new Thread(() -> {
+            StartController.data.clear();
+            StartController.data.addAll(StartController.orderItemDTOList.stream().map(OrderTableModel::of).collect(Collectors.toList()));
+        });
+        thread.start();
     }
 
     private Stage getStage() {

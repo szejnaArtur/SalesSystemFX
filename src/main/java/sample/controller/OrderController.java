@@ -1,7 +1,5 @@
 package sample.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,7 +16,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import sample.dto.BillDTO;
 import sample.dto.MenuItemDTO;
 import sample.dto.MenuItemTypeDTO;
 import sample.dto.OrderItemDTO;
@@ -30,7 +27,6 @@ import sample.table.OrderTableModel;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,7 +38,6 @@ public class OrderController implements Initializable {
     private final MenuItemTypeRestClient menuItemTypeRestClient;
     private final MenuItemRestClient menuItemRestClient;
 
-    private final ObservableList<OrderTableModel> data;
     private final PopupFactory popupFactory;
 
     @FXML
@@ -111,7 +106,6 @@ public class OrderController implements Initializable {
     public OrderController() {
         this.menuItemTypeRestClient = new MenuItemTypeRestClient();
         this.menuItemRestClient = new MenuItemRestClient();
-        this.data = FXCollections.observableArrayList();
         OrderItemRestClient orderItemRestClient = new OrderItemRestClient();
         this.popupFactory = new PopupFactory();
     }
@@ -161,11 +155,6 @@ public class OrderController implements Initializable {
                 Stage infoPopup = popupFactory.createInfoPopup("The order is empty.");
                 infoPopup.show();
             }
-
-//                orderItemRestClient.saveOrderItems(orderItemDTOList);
-//                openStartPanelAndCloseRestaurantPanel();
-//                Stage infoPopup = popupFactory.createInfoPopup("The order has been registered.");
-//                infoPopup.show();
         });
     }
 
@@ -260,13 +249,13 @@ public class OrderController implements Initializable {
 
         loadMenuOrderData();
 
-        orderTableView.setItems(data);
+        orderTableView.setItems(StartController.data);
     }
 
     private void loadMenuOrderData() {
         Thread thread = new Thread(() -> {
-            data.clear();
-            data.addAll(StartController.orderItemDTOList.stream().map(OrderTableModel::of).collect(Collectors.toList()));
+            StartController.data.clear();
+            StartController.data.addAll(StartController.orderItemDTOList.stream().map(OrderTableModel::of).collect(Collectors.toList()));
         });
         thread.start();
     }
