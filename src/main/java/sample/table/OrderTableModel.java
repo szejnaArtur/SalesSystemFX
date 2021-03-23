@@ -9,19 +9,33 @@ public class OrderTableModel {
     private final SimpleStringProperty price;
     private final SimpleStringProperty quantity;
     private final SimpleStringProperty total;
+    private final SimpleStringProperty discount;
 
-    public OrderTableModel(String item, Double price, Integer quantity) {
+    public OrderTableModel(String item, Double price, Integer quantity, Double discount) {
         this.item = new SimpleStringProperty(item);
         this.price = new SimpleStringProperty(Double.toString(price));
         this.quantity = new SimpleStringProperty(Integer.toString(quantity));
         String totalPrice = String.format("%.2f", price*quantity);
         this.total = new SimpleStringProperty(totalPrice);
+        this.discount = new SimpleStringProperty(String.format("%.2f", discount));
     }
 
     public static OrderTableModel of(OrderItemDTO orderItemDTO){
         return new OrderTableModel(orderItemDTO.getMenuItemDTO().getName(),
                 orderItemDTO.getMenuItemDTO().getPrice(),
-                orderItemDTO.getAmount());
+                orderItemDTO.getAmount(), orderItemDTO.getDiscount());
+    }
+
+    public String getDiscount() {
+        return discount.get();
+    }
+
+    public SimpleStringProperty discountProperty() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount.set(discount);
     }
 
     public String getItem() {

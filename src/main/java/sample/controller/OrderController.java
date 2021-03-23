@@ -245,7 +245,11 @@ public class OrderController implements Initializable {
         totalColumn.setMinWidth(100);
         totalColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, Double>("total"));
 
-        orderTableView.getColumns().addAll(nameColumn, quantityColumn, priceColumn, totalColumn);
+        TableColumn discountColumn = new TableColumn("Discount");
+        discountColumn.setMinWidth(100);
+        discountColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, Double>("discount"));
+
+        orderTableView.getColumns().addAll(nameColumn, quantityColumn, priceColumn, totalColumn, discountColumn);
 
         loadMenuOrderData();
 

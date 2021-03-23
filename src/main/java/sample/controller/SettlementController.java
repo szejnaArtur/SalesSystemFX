@@ -12,12 +12,14 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sample.dto.OrderItemDTO;
 import sample.factory.PopupFactory;
 import sample.rest.OrderItemRestClient;
 import sample.table.OrderTableModel;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -159,6 +161,49 @@ public class SettlementController implements Initializable {
         initializeEveryPennyButton();
         initializetexIDButton();
         initializeOrderTableView();
+        initializeNeighborButton();
+        initializeEmployeeButton();
+        initializeSuperServiceButton();
+    }
+
+    private void initializeNeighborButton() {
+        neighborButton.setOnAction(x -> discount(10));
+    }
+
+    private void initializeEmployeeButton() {
+        employeeButton.setOnAction(x -> discount(50));
+    }
+
+    private void initializeSuperServiceButton() {
+        superServiceButton.setOnAction(x -> discount(100));
+    }
+
+    private void discount(Integer percentDiscount) {
+        OrderTableModel selectedItem = orderTableView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            List<OrderItemDTO> orderItemDTOList = StartController.orderItemDTOList;
+            for (OrderItemDTO dto : orderItemDTOList) {
+                if (dto.getMenuItemDTO().getName().equals(selectedItem.getItem())) {
+                    if (dto.getAmount() >= 2) {
+                        Stage spinnerPopup = popupFactory.createSpinnerPopup("How many items do you want to discount?",
+                                dto, percentDiscount * 0.01, () -> {
+                                    loadMenuOrderData();
+                                    toPayLabel.setText(String.format("Total: %.2f PLN", StartController.getTotalPrice()));
+                                });
+                        spinnerPopup.show();
+                    } else {
+                        double discount = dto.getAmount() * dto.getMenuItemDTO().getPrice() * 0.10;
+                        dto.setDiscount(discount);
+                        loadMenuOrderData();
+                        toPayLabel.setText(String.format("Total: %.2f PLN", StartController.getTotalPrice()));
+                    }
+                    break;
+                }
+            }
+        } else {
+            Stage infoPopup = popupFactory.createInfoPopup("No items have been selected.");
+            infoPopup.show();
+        }
     }
 
     private void initializetexIDButton() {
@@ -361,22 +406,26 @@ public class SettlementController implements Initializable {
         orderTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn nameColumn = new TableColumn("Name");
-        nameColumn.setMinWidth(250);
+        nameColumn.setMinWidth(220);
         nameColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, String>("item"));
 
         TableColumn quantityColumn = new TableColumn("Quantity");
-        quantityColumn.setMinWidth(100);
+        quantityColumn.setMinWidth(90);
         quantityColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, Integer>("quantity"));
 
         TableColumn priceColumn = new TableColumn("Price");
-        priceColumn.setMinWidth(100);
+        priceColumn.setMinWidth(90);
         priceColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, Double>("price"));
 
         TableColumn totalColumn = new TableColumn("Total");
-        totalColumn.setMinWidth(100);
+        totalColumn.setMinWidth(90);
         totalColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, Double>("total"));
 
-        orderTableView.getColumns().addAll(nameColumn, quantityColumn, priceColumn, totalColumn);
+        TableColumn discountColumn = new TableColumn("Discount");
+        discountColumn.setMinWidth(90);
+        discountColumn.setCellValueFactory(new PropertyValueFactory<OrderTableModel, Double>("discount"));
+
+        orderTableView.getColumns().addAll(nameColumn, quantityColumn, priceColumn, totalColumn, discountColumn);
 
         loadMenuOrderData();
 

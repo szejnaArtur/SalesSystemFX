@@ -2,15 +2,15 @@ package sample.factory;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sample.controller.StartController;
+import sample.dto.OrderItemDTO;
 import sample.handler.InfoPopupButtonHandler;
 
 public class PopupFactory {
@@ -42,6 +42,15 @@ public class PopupFactory {
         pane.setSpacing(10);
         pane.setStyle(waitingPopupPaneStyle());
         pane.getChildren().addAll(label, button);
+        return pane;
+    }
+
+    private VBox createVBox(Label label, Spinner spinner, Button button) {
+        VBox pane = new VBox();
+        pane.setAlignment(Pos.CENTER);
+        pane.setSpacing(10);
+        pane.setStyle(waitingPopupPaneStyle());
+        pane.getChildren().addAll(label, spinner, button);
         return pane;
     }
 
@@ -146,5 +155,36 @@ public class PopupFactory {
         button.setOnMouseExited(x -> button.setStyle(okButtonStyle()));
         button.setOnAction(x -> stage.close());
         return button;
+    }
+
+    public Stage createSpinnerPopup(String text, OrderItemDTO dto, Double discount, InfoPopupButtonHandler handler) {
+        Stage stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+
+        ProgressBar progressBar = new ProgressBar();
+
+        Spinner<Integer> spinner = new Spinner<>();
+        SpinnerValueFactory<Integer> spinnerValueFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, dto.getAmount(), dto.getAmount());
+        spinner.setValueFactory(spinnerValueFactory);
+
+        Button button = new Button("Ok");
+        button.setStyle(okButtonStyle());
+        button.setPrefSize(200, 80);
+        button.setOnMouseEntered(x -> button.setStyle(okButtonHoverStyle()));
+        button.setOnMouseExited(x -> button.setStyle(okButtonStyle()));
+        button.setOnAction(x -> {
+            stage.close();
+            for (OrderItemDTO item : StartController.orderItemDTOList){
+                if(dto.getMenuItemDTO().getName().equals(item.getMenuItemDTO().getName())){
+                    item.setDiscount(spinner.getValue() * dto.getMenuItemDTO().getPrice() * discount);
+                }
+            }
+            handler.handle();
+        });
+        stage.setScene(new Scene(createVBox(createLabel(text), spinner, button), 700, 300));
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        return stage;
     }
 }

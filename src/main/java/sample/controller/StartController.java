@@ -27,7 +27,7 @@ public class StartController {
     public static Double getTotalPrice() {
         double total = 0.0;
         for (OrderItemDTO orderItem : orderItemDTOList) {
-            total += orderItem.getAmount() * orderItem.getMenuItemDTO().getPrice();
+            total += (orderItem.getAmount() * orderItem.getMenuItemDTO().getPrice()) - orderItem.getDiscount();
         }
         return total;
     }
