@@ -164,6 +164,26 @@ public class SettlementController implements Initializable {
         initializeNeighborButton();
         initializeEmployeeButton();
         initializeSuperServiceButton();
+        initializeTenButton();
+        initializeTwentyButton();
+        initializeFiftyButton();
+        initializeHundredButton();
+    }
+
+    private void initializeHundredButton() {
+        hundredButton.setOnAction(x -> pay(100.0, "CASH"));
+    }
+
+    private void initializeFiftyButton() {
+        fiftyButton.setOnAction(x -> pay(50.0, "CASH"));
+    }
+
+    private void initializeTwentyButton() {
+        twentyButton.setOnAction(x -> pay(20.0, "CASH"));
+    }
+
+    private void initializeTenButton() {
+        tenButton.setOnAction(x -> pay(10.0, "CASH"));
     }
 
     private void initializeNeighborButton() {
@@ -192,7 +212,7 @@ public class SettlementController implements Initializable {
                                 });
                         spinnerPopup.show();
                     } else {
-                        double discount = dto.getAmount() * dto.getMenuItemDTO().getPrice() * 0.10;
+                        double discount = dto.getAmount() * dto.getMenuItemDTO().getPrice() * percentDiscount * 0.01;
                         dto.setDiscount(discount);
                         loadMenuOrderData();
                         toPayLabel.setText(String.format("Total: %.2f PLN", StartController.getTotalPrice()));
@@ -240,6 +260,24 @@ public class SettlementController implements Initializable {
         });
     }
 
+    private void pay(Double cash, String paymentMethod) {
+        paid += cash;
+
+        paidLabel.setText(String.format("Paid: %.2f PLN", paid));
+        Double totalPrice = StartController.getTotalPrice();
+        if (paid >= totalPrice) {
+            double rest = paid - totalPrice;
+            restLabel.setText(String.format("Rest: %.2f PLN", rest));
+            StartController.bill.setPaymentMethod(paymentMethod);
+            Stage infoPopup = popupFactory.createInfoPopup(String.format("Spend the rest: %.2f PLN", rest), () -> {
+                orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
+                getStage().close();
+                openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
+            });
+            infoPopup.show();
+        }
+    }
+
     private void initializeCardButton() {
         cardButton.setOnAction(x -> {
             Double totalPrice = StartController.getTotalPrice();
@@ -266,24 +304,7 @@ public class SettlementController implements Initializable {
     private void initializeCashButton() {
         cashButton.setOnAction(x -> {
             if (!amount.equals("")) {
-                double cash = Double.parseDouble(amount);
-                paid += cash;
-
-                paidLabel.setText(String.format("Paid: %.2f PLN", paid));
-                Double totalPrice = StartController.getTotalPrice();
-                amount = "";
-                countTextField.setText(amount);
-                if (paid > totalPrice) {
-                    double rest = paid - totalPrice;
-                    restLabel.setText(String.format("Rest: %.2f PLN", rest));
-                    StartController.bill.setPaymentMethod("CASH");
-                    Stage infoPopup = popupFactory.createInfoPopup(String.format("Spend the rest: %.2f PLN", rest), () -> {
-                        orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
-                        getStage().close();
-                        openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
-                    });
-                    infoPopup.show();
-                }
+                pay(Double.parseDouble(amount), "CASH");
             }
         });
     }

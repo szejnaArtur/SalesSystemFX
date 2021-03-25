@@ -13,5 +13,9 @@ public class BillDTO {
     private EmployeeDTO employeeDTO;
     private String paymentMethod;
     private Long texID;
+    private Double cashPaymentAmount;
+    private Double cardPaymentAmount;
+    private Double payUPaymentAmount;
+    private Double sodexoPaymentAmount;
 
 }
