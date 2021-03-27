@@ -31,4 +31,8 @@ public class StartController {
         }
         return total;
     }
+
+    public static Double leftToPay(){
+        return getTotalPrice() - bill.howMuchWasPaid();
+    }
 }

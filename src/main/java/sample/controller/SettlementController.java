@@ -31,7 +31,6 @@ public class SettlementController implements Initializable {
     private static final String APP_TITLE = "POS Restaurant System";
 
     private String amount = "";
-    private double paid = 0;
 
     private final PopupFactory popupFactory;
     private final OrderItemRestClient orderItemRestClient;
@@ -143,7 +142,7 @@ public class SettlementController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeReturnButton();
-        initializeBorderPane();
+        initializeToPayLabel();
         initializeZeroButton();
         initializeOneButton();
         initializeTwoButton();
@@ -171,19 +170,19 @@ public class SettlementController implements Initializable {
     }
 
     private void initializeHundredButton() {
-        hundredButton.setOnAction(x -> pay(100.0, "CASH"));
+        hundredButton.setOnAction(x -> pay(100.0));
     }
 
     private void initializeFiftyButton() {
-        fiftyButton.setOnAction(x -> pay(50.0, "CASH"));
+        fiftyButton.setOnAction(x -> pay(50.0));
     }
 
     private void initializeTwentyButton() {
-        twentyButton.setOnAction(x -> pay(20.0, "CASH"));
+        twentyButton.setOnAction(x -> pay(20.0));
     }
 
     private void initializeTenButton() {
-        tenButton.setOnAction(x -> pay(10.0, "CASH"));
+        tenButton.setOnAction(x -> pay(10.0));
     }
 
     private void initializeNeighborButton() {
@@ -244,37 +243,27 @@ public class SettlementController implements Initializable {
     }
 
     private void initializeEveryPennyButton() {
-        everyPennyButton.setOnAction(x -> {
-            Double totalPrice = StartController.getTotalPrice();
-            paidLabel.setText(String.format("Paid: %.2f PLN", totalPrice));
-            amount = "";
-            countTextField.setText(amount);
-            restLabel.setText(String.format("Rest: %.2f PLN", 0.0));
-            StartController.bill.setPaymentMethod("CASH");
-            Stage infoPopup = popupFactory.createInfoPopup("Close the drawer", () -> {
-                orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
-                getStage().close();
-                openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
-            });
-            infoPopup.show();
-        });
+        everyPennyButton.setOnAction(x -> pay(StartController.leftToPay()));
     }
 
-    private void pay(Double cash, String paymentMethod) {
-        paid += cash;
-
-        paidLabel.setText(String.format("Paid: %.2f PLN", paid));
+    private void pay(Double cash) {
+        Double totalAmountPaid = StartController.bill.howMuchWasPaid();
         Double totalPrice = StartController.getTotalPrice();
-        if (paid >= totalPrice) {
-            double rest = paid - totalPrice;
+        Double totalCashPaymentAmount = StartController.bill.getCashPaymentAmount();
+        paidLabel.setText(String.format("Paid: %.2f PLN", totalAmountPaid + cash));
+
+        if (totalAmountPaid + cash >= totalPrice) {
+            double rest = totalAmountPaid + cash - totalPrice;
             restLabel.setText(String.format("Rest: %.2f PLN", rest));
-            StartController.bill.setPaymentMethod(paymentMethod);
+            StartController.bill.setCashPaymentAmount(totalCashPaymentAmount + cash - rest);
             Stage infoPopup = popupFactory.createInfoPopup(String.format("Spend the rest: %.2f PLN", rest), () -> {
                 orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
                 getStage().close();
                 openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
             });
             infoPopup.show();
+        } else {
+            StartController.bill.setCashPaymentAmount(totalCashPaymentAmount + cash);
         }
     }
 
@@ -282,8 +271,10 @@ public class SettlementController implements Initializable {
         cardButton.setOnAction(x -> {
             Double totalPrice = StartController.getTotalPrice();
             paidLabel.setText(String.format("Paid: %.2f PLN", totalPrice));
-            StartController.bill.setPaymentMethod("CARD");
-            Stage infoPopup = popupFactory.createInfoPopup("Ask for card insertion ...", () -> {
+            Double leftToPay = StartController.leftToPay();
+            StartController.bill.setCardPaymentAmount(leftToPay);
+
+            Stage infoPopup = popupFactory.createInfoPopup(String.format("To pay by card: %.2f PLN", leftToPay), () -> {
                 if (totalPrice >= 100) {
                     Stage pinPopup = popupFactory.createInfoPopup("Ask for a PIN code...", () -> {
                         orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
@@ -304,7 +295,7 @@ public class SettlementController implements Initializable {
     private void initializeCashButton() {
         cashButton.setOnAction(x -> {
             if (!amount.equals("")) {
-                pay(Double.parseDouble(amount), "CASH");
+                pay(Double.parseDouble(amount));
             }
         });
     }
@@ -323,7 +314,6 @@ public class SettlementController implements Initializable {
         });
     }
 
-
     private void initializeNineButton() {
         nineButton.setOnAction(x -> {
             amount = amount + "9";
@@ -331,14 +321,12 @@ public class SettlementController implements Initializable {
         });
     }
 
-
     private void initializeEightButton() {
         eightButton.setOnAction(x -> {
             amount = amount + "8";
             countTextField.setText(amount);
         });
     }
-
 
     private void initializeSevenButton() {
         sevenButton.setOnAction(x -> {
@@ -396,10 +384,9 @@ public class SettlementController implements Initializable {
         });
     }
 
-    private void initializeBorderPane() {
+    private void initializeToPayLabel() {
         toPayLabel.setText(String.format("To paid: %.2f PLN", StartController.getTotalPrice()));
     }
-
 
     private void initializeReturnButton() {
         closeButton.setOnAction(x -> {
@@ -456,7 +443,9 @@ public class SettlementController implements Initializable {
     private void loadMenuOrderData() {
         Thread thread = new Thread(() -> {
             StartController.data.clear();
-            StartController.data.addAll(StartController.orderItemDTOList.stream().map(OrderTableModel::of).collect(Collectors.toList()));
+            StartController.data.addAll(StartController.orderItemDTOList.stream()
+                    .map(OrderTableModel::of)
+                    .collect(Collectors.toList()));
         });
         thread.start();
     }
