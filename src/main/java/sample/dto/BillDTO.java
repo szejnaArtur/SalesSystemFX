@@ -28,4 +28,8 @@ public class BillDTO {
         return cardPaymentAmount + cashPaymentAmount + payUPaymentAmount + sodexoPaymentAmount;
     }
 
+    public Double howMuchWasSodexo(){
+        return cardPaymentAmount + cashPaymentAmount + payUPaymentAmount + sodexoPaymentAmount;
+    }
+
 }

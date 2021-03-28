@@ -167,6 +167,32 @@ public class SettlementController implements Initializable {
         initializeTwentyButton();
         initializeFiftyButton();
         initializeHundredButton();
+        initializePayUButton();
+        initializeSodexoButton();
+    }
+
+    private void initializePayUButton() {
+        payUButton.setOnAction(x -> {
+            Stage infoPopup = popupFactory.createInfoPopup("The order has been paid for by payU.", () -> {
+                StartController.bill.setCashPaymentAmount(0.0);
+                StartController.bill.setCardPaymentAmount(0.0);
+                StartController.bill.setSodexoPaymentAmount(0.0);
+                StartController.bill.setPayUPaymentAmount(StartController.getTotalPrice());
+
+                orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
+                getStage().close();
+                openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
+            });
+            infoPopup.show();
+        });
+    }
+
+    private void initializeSodexoButton() {
+        sodexoButton.setOnAction(x -> {
+            if (!amount.equals("")) {
+                sodexoPay(Double.parseDouble(amount));
+            }
+        });
     }
 
     private void initializeHundredButton() {
@@ -264,6 +290,47 @@ public class SettlementController implements Initializable {
             infoPopup.show();
         } else {
             StartController.bill.setCashPaymentAmount(totalCashPaymentAmount + cash);
+        }
+    }
+
+    private void sodexoPay(Double sodexo) {
+        Double totalAmountPaid = StartController.bill.howMuchWasPaid();
+        Double totalPrice = StartController.getTotalPrice();
+        Double totalSodexoPaymentAmount = StartController.bill.getSodexoPaymentAmount();
+        paidLabel.setText(String.format("Paid: %.2f PLN", totalAmountPaid + sodexo));
+        StartController.bill.setSodexoPaymentAmount(totalSodexoPaymentAmount + sodexo);
+
+        if (totalAmountPaid + sodexo >= totalPrice) {
+            if (StartController.bill.getCashPaymentAmount() > 0) {
+                Double cash = StartController.bill.getCashPaymentAmount();
+                Double rest = totalAmountPaid + sodexo - totalPrice;
+                if (rest <= cash) {
+                    StartController.bill.setCashPaymentAmount(cash - rest);
+                    restLabel.setText(String.format("Rest: %.2f PLN", rest));
+                    Stage infoPopup = popupFactory.createInfoPopup(String.format("Spend the rest: %.2f PLN", rest), () -> {
+                        orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
+                        getStage().close();
+                        openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
+                    });
+                    infoPopup.show();
+                } else {
+                    StartController.bill.setCashPaymentAmount(0.0);
+                    restLabel.setText(String.format("Rest: %.2f PLN", cash));
+                    Stage infoPopup = popupFactory.createInfoPopup(String.format("Spend the rest: %.2f PLN", cash), () -> {
+                        orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
+                        getStage().close();
+                        openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
+                    });
+                    infoPopup.show();
+                }
+            } else {
+                Stage infoPopup = popupFactory.createInfoPopup("Don't spend the change in cash!", () -> {
+                    orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
+                    getStage().close();
+                    openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
+                });
+                infoPopup.show();
+            }
         }
     }
 
