@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import sample.dto.AddonDTO;
 import sample.dto.MenuItemDTO;
 import sample.dto.MenuItemTypeDTO;
 import sample.factory.PopupFactory;
@@ -13,6 +14,8 @@ import sample.rest.MenuItemRestClient;
 import sample.rest.MenuItemTypeRestClient;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AddMenuItemController implements Initializable {
@@ -74,7 +77,8 @@ public class AddMenuItemController implements Initializable {
         Integer kcal = Integer.valueOf(kcalTextField.getText());
         String type = typeTextField.getText();
         MenuItemTypeDTO menuItemType = menuItemTypeRestClient.getMenuItemType(type);
-        return MenuItemDTO.of(name, price, kcal, menuItemType);
+        List<AddonDTO> addons = new ArrayList<>();
+        return MenuItemDTO.of(name, price, kcal, menuItemType, addons);
     }
 
     private void initializeCancelButton() {

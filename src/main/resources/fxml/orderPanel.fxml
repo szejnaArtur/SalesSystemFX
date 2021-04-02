@@ -7,8 +7,11 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -20,105 +23,14 @@
                <children>
                   <HBox prefHeight="540.0" prefWidth="1500.0">
                      <children>
-                        <VBox prefHeight="540.0" prefWidth="960.0">
+                        <VBox prefHeight="490.0" prefWidth="1022.0">
                            <children>
-                              <HBox prefHeight="180.0" prefWidth="200.0">
+                              <HBox prefHeight="483.0" prefWidth="1024.0">
                                  <children>
-                                    <Button fx:id="tableOneButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 1">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableTwoButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 2" textAlignment="CENTER">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableThreeButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 3">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableFourButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 4">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableFiveButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 5">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
+                                    <TableView fx:id="orderTableView" prefHeight="356.0" prefWidth="1024.0" />
                                  </children>
                               </HBox>
                               <HBox prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <Button fx:id="tableSixButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 6">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableSevenButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 7">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableEightButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 8">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableNineButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 9">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableTenButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 10">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <Button fx:id="tableIElevenButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table11">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableTwelveButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 12">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableThirteenButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 13">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableFouteenButton" disable="true" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Table 14">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="tableTakeawayButton" mnemonicParsing="false" prefHeight="170.0" prefWidth="182.0" styleClass="dark-green-button" text="Takeaway">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="540.0" prefWidth="960.0">
-                           <children>
-                              <TableView fx:id="orderTableView" prefHeight="394.0" prefWidth="719.0">
-                                 <VBox.margin>
-                                    <Insets left="5.0" />
-                                 </VBox.margin>
-                              </TableView>
-                              <HBox prefHeight="98.0" prefWidth="960.0">
                                  <children>
                                     <Button fx:id="removeButton" mnemonicParsing="false" prefHeight="77.0" prefWidth="300.0" styleClass="purple-button" text="Remove selected">
                                        <HBox.margin>
@@ -142,6 +54,21 @@
                               </HBox>
                            </children>
                         </VBox>
+                        <GridPane fx:id="addonGridPane" prefHeight="490.0" prefWidth="899.0">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
                      </children>
                   </HBox>
                   <HBox prefHeight="600.0" prefWidth="1500.0">

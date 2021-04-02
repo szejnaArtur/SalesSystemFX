@@ -7,15 +7,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sample.dto.AddonDTO;
 import sample.dto.MenuItemDTO;
 import sample.dto.MenuItemTypeDTO;
 import sample.dto.OrderItemDTO;
@@ -44,49 +42,7 @@ public class OrderController implements Initializable {
     private Pane menuPane;
 
     @FXML
-    private Button tableOneButton;
-
-    @FXML
-    private Button tableTwoButton;
-
-    @FXML
-    private Button tableThreeButton;
-
-    @FXML
-    private Button tableFourButton;
-
-    @FXML
-    private Button tableFiveButton;
-
-    @FXML
-    private Button tableSixButton;
-
-    @FXML
-    private Button tableSevenButton;
-
-    @FXML
-    private Button tableEightButton;
-
-    @FXML
-    private Button tableNineButton;
-
-    @FXML
-    private Button tableTenButton;
-
-    @FXML
-    private Button tableIElevenButton;
-
-    @FXML
-    private Button tableTwelveButton;
-
-    @FXML
-    private Button tableThirteenButton;
-
-    @FXML
-    private Button tableFouteenButton;
-
-    @FXML
-    private Button tableTakeawayButton;
+    private GridPane addonGridPane;
 
     @FXML
     private TableView<OrderTableModel> orderTableView;
@@ -116,7 +72,48 @@ public class OrderController implements Initializable {
         initializeMenuItemTabPane();
         initializeOrderTableView();
         initializeRemoveButton();
-        initializesettlementButton();
+        initializeSettlementButton();
+        initializeAddonsGridPane();
+    }
+
+    private void initializeAddonsGridPane() {
+        orderTableView.setOnMousePressed(action -> {
+            OrderTableModel selectedItem = orderTableView.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                for (MenuItemDTO dto : StartController.menuItemsDTO) {
+                    if (dto.getName().equals(selectedItem.getItem())) {
+                        addonGridPane.getChildren().clear();
+                        int y = 0;
+                        int x = 0;
+                        for (AddonDTO addon : dto.getAddons()){
+                            if (x == 4){
+                                y++;
+                                x = 0;
+                            }
+                            Button button = getButton(addon);
+                            addonGridPane.add(button, x++, y);
+                        }
+                        break;
+                    }
+                }
+
+//                for (MenuItemDTO item : menu.get(type.getName())) {
+//                    if (x == 7) {
+//                        y++;
+//                        x = 0;
+//                    }
+//                    Button button = getButton(item);
+//                    gridPane.add(button, x++, y);
+//                }
+//                anchorPane.getChildren().add(gridPane);
+//                tab.setContent(anchorPane);
+//                menuItemTabPane.getTabs().add(tab);
+
+
+            } else {
+                addonGridPane.getChildren().clear();
+            }
+        });
     }
 
     private void initializeRemoveButton() {
@@ -136,7 +133,7 @@ public class OrderController implements Initializable {
         });
     }
 
-    private void initializesettlementButton() {
+    private void initializeSettlementButton() {
         settlementButton.setOnAction(x -> {
             if (StartController.orderItemDTOList.size() > 0) {
                 Stage settlementStage = new Stage();
@@ -159,6 +156,8 @@ public class OrderController implements Initializable {
     }
 
     private void initializeMenuItemTabPane() {
+        menuItemTabPane.setTabMinHeight(80);
+        menuItemTabPane.setTabMinWidth(150);
         List<MenuItemTypeDTO> menuItemTypes = menuItemTypeRestClient.getMenuItemTypes();
         List<MenuItemDTO> menuItems = menuItemRestClient.getMenuItems();
         Map<String, List<MenuItemDTO>> menu = new HashMap<>();
@@ -223,6 +222,41 @@ public class OrderController implements Initializable {
             loadMenuOrderData();
             totalLabel.setText(String.format("Total: %.2f PLN", StartController.getTotalPrice()));
         });
+        return button;
+    }
+
+    private Button getButton(AddonDTO addon) {
+        Button button = new Button(addon.getName() + "\n" + addon.getPrice());
+        button.setPrefSize(275, 128);
+        button.setTextAlignment(TextAlignment.CENTER);
+        button.setFont(Font.font(18));
+        button.setStyle(getStyle());
+        button.setOnMouseEntered(x -> button.setStyle(getHoverStyle()));
+        button.setOnMouseExited(x -> button.setStyle(getStyle()));
+        button.setOnMousePressed(x -> button.setStyle(getPressedStyle()));
+        button.setOnMouseClicked(x -> button.setStyle(getHoverStyle()));
+//        button.setOnAction(x -> {
+//            if (StartController.orderItemDTOList.size() == 0) {
+//                OrderItemDTO orderItemDTO = new OrderItemDTO(item);
+//                orderItemDTO.setBillDTO(StartController.bill);
+//                StartController.orderItemDTOList.add(orderItemDTO);
+//            } else {
+//                if (isOrderItem(item)) {
+//                    for (OrderItemDTO orderItemDTO : StartController.orderItemDTOList) {
+//                        if (orderItemDTO.getMenuItemDTO().getName().equals(item.getName())) {
+//                            orderItemDTO.increaseTheQuantity();
+//                        }
+//                    }
+//                } else {
+//                    OrderItemDTO orderItemDTO = new OrderItemDTO(item);
+//                    orderItemDTO.setBillDTO(StartController.bill);
+//                    StartController.orderItemDTOList.add(orderItemDTO);
+//                }
+//            }
+//
+//            loadMenuOrderData();
+//            totalLabel.setText(String.format("Total: %.2f PLN", StartController.getTotalPrice()));
+//        });
         return button;
     }
 

@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import sample.dto.AddonDTO;
 import sample.dto.MenuItemDTO;
 import sample.dto.MenuItemTypeDTO;
 import sample.factory.PopupFactory;
@@ -15,6 +16,8 @@ import sample.rest.MenuItemRestClient;
 import sample.rest.MenuItemTypeRestClient;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class EditMenuItemController implements Initializable {
@@ -85,7 +88,8 @@ public class EditMenuItemController implements Initializable {
         String type = typeTextField.getText();
         String descrition = descriptionTextField.getText();
         MenuItemTypeDTO menuItemType = menuItemTypeRestClient.getMenuItemType(type);
-        MenuItemDTO dto = MenuItemDTO.of(name, price, kcal, menuItemType, descrition);
+        List<AddonDTO> addons = new ArrayList<>();
+        MenuItemDTO dto = MenuItemDTO.of(name, price, kcal, menuItemType, descrition, addons);
         dto.setIdMenuItem(idMenuItem);
         return dto;
     }

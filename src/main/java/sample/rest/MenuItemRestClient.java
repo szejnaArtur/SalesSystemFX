@@ -17,6 +17,7 @@ public class MenuItemRestClient {
     private static final String POST_ADD_URL = "http://localhost:8080/menuItems/add";
     private static final String GET_FIND_URL = "http://localhost:8080/menuItems/find/";
     private static final String DELETE_FIND_URL = "http://localhost:8080/menuItems/delete/";
+    private static final String GET_FIND_BY_NAME_URL = "http://localhost:8080/menuItems/findByName/";
 
     private final RestTemplate restTemplate;
 
@@ -38,6 +39,17 @@ public class MenuItemRestClient {
 
     public MenuItemDTO getMenuItem(Long idMenuItem) {
         String url = GET_FIND_URL + idMenuItem;
+        ResponseEntity<MenuItemDTO> responseEntity = restTemplate.getForEntity(url, MenuItemDTO.class);
+        if(HttpStatus.OK.equals(responseEntity.getStatusCode())){
+            return responseEntity.getBody();
+        } else {
+            //TODO implement
+            throw new RuntimeException("Can't load Menu item.");
+        }
+    }
+
+    public MenuItemDTO getMenuItem(String name) {
+        String url = GET_FIND_BY_NAME_URL + name;
         ResponseEntity<MenuItemDTO> responseEntity = restTemplate.getForEntity(url, MenuItemDTO.class);
         if(HttpStatus.OK.equals(responseEntity.getStatusCode())){
             return responseEntity.getBody();
