@@ -13,10 +13,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import sample.dto.AddonDTO;
-import sample.dto.MenuItemDTO;
-import sample.dto.MenuItemTypeDTO;
-import sample.dto.OrderItemDTO;
+import sample.dto.*;
 import sample.factory.PopupFactory;
 import sample.rest.MenuItemRestClient;
 import sample.rest.MenuItemTypeRestClient;
@@ -69,6 +66,8 @@ public class OrderController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadView();
+        addonGridPane.setVgap(5);
+        addonGridPane.setHgap(5);
         initializeMenuItemTabPane();
         initializeOrderTableView();
         initializeRemoveButton();
@@ -85,8 +84,8 @@ public class OrderController implements Initializable {
                         addonGridPane.getChildren().clear();
                         int y = 0;
                         int x = 0;
-                        for (AddonDTO addon : dto.getAddons()){
-                            if (x == 4){
+                        for (AddonDTO addon : dto.getAddons()) {
+                            if (x == 5) {
                                 y++;
                                 x = 0;
                             }
@@ -229,34 +228,39 @@ public class OrderController implements Initializable {
         Button button = new Button(addon.getName() + "\n" + addon.getPrice());
         button.setPrefSize(275, 128);
         button.setTextAlignment(TextAlignment.CENTER);
-        button.setFont(Font.font(18));
+        button.setFont(Font.font(10));
         button.setStyle(getStyle());
         button.setOnMouseEntered(x -> button.setStyle(getHoverStyle()));
         button.setOnMouseExited(x -> button.setStyle(getStyle()));
         button.setOnMousePressed(x -> button.setStyle(getPressedStyle()));
         button.setOnMouseClicked(x -> button.setStyle(getHoverStyle()));
-//        button.setOnAction(x -> {
-//            if (StartController.orderItemDTOList.size() == 0) {
-//                OrderItemDTO orderItemDTO = new OrderItemDTO(item);
-//                orderItemDTO.setBillDTO(StartController.bill);
-//                StartController.orderItemDTOList.add(orderItemDTO);
-//            } else {
-//                if (isOrderItem(item)) {
-//                    for (OrderItemDTO orderItemDTO : StartController.orderItemDTOList) {
-//                        if (orderItemDTO.getMenuItemDTO().getName().equals(item.getName())) {
-//                            orderItemDTO.increaseTheQuantity();
-//                        }
-//                    }
-//                } else {
-//                    OrderItemDTO orderItemDTO = new OrderItemDTO(item);
-//                    orderItemDTO.setBillDTO(StartController.bill);
-//                    StartController.orderItemDTOList.add(orderItemDTO);
-//                }
-//            }
-//
-//            loadMenuOrderData();
-//            totalLabel.setText(String.format("Total: %.2f PLN", StartController.getTotalPrice()));
-//        });
+
+        button.setOnAction(x -> {
+
+            OrderTableModel selectedItem = orderTableView.getSelectionModel().getSelectedItem();
+            for (OrderItemDTO orderItemDTO : StartController.orderItemDTOList){
+                if (orderItemDTO.getMenuItemDTO().getName().equals(selectedItem.getItem())){
+                    if (orderItemDTO.getOrderAddonDTOList().size() == 0){
+                        OrderAddonDTO orderAddonDTO = new OrderAddonDTO(addon);
+                        orderItemDTO.getOrderAddonDTOList().add(orderAddonDTO);
+                    } else {
+                        if (isOrderAddon(addon, orderItemDTO)) {
+                            for (OrderAddonDTO orderAddonDTO : orderItemDTO.getOrderAddonDTOList()) {
+                                if (orderAddonDTO.getAddonDTO().getName().equals(addon.getName())){
+                                    orderAddonDTO.increaseTheQuantity();
+                                    break;
+                                }
+                            }
+                        } else {
+                            OrderAddonDTO orderAddonDTO = new OrderAddonDTO(addon);
+                            orderItemDTO.getOrderAddonDTOList().add(orderAddonDTO);
+                        }
+                    }
+                    break;
+                }
+            }
+            System.out.println(StartController.orderItemDTOList.toString());
+        });
         return button;
     }
 
@@ -341,6 +345,15 @@ public class OrderController implements Initializable {
     private Boolean isOrderItem(MenuItemDTO item) {
         for (OrderItemDTO dto : StartController.orderItemDTOList) {
             if (dto.getMenuItemDTO().getName().equals(item.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Boolean isOrderAddon(AddonDTO addon, OrderItemDTO orderItem) {
+        for (OrderAddonDTO dto : orderItem.getOrderAddonDTOList()) {
+            if (dto.getAddonDTO().getName().equals(addon.getName())) {
                 return true;
             }
         }
