@@ -7,7 +7,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
@@ -23,7 +26,6 @@ import sample.table.OrderTableModel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class OrderController implements Initializable {
 
@@ -95,20 +97,6 @@ public class OrderController implements Initializable {
                         break;
                     }
                 }
-
-//                for (MenuItemDTO item : menu.get(type.getName())) {
-//                    if (x == 7) {
-//                        y++;
-//                        x = 0;
-//                    }
-//                    Button button = getButton(item);
-//                    gridPane.add(button, x++, y);
-//                }
-//                anchorPane.getChildren().add(gridPane);
-//                tab.setContent(anchorPane);
-//                menuItemTabPane.getTabs().add(tab);
-
-
             } else {
                 addonGridPane.getChildren().clear();
             }
@@ -238,15 +226,15 @@ public class OrderController implements Initializable {
         button.setOnAction(x -> {
 
             OrderTableModel selectedItem = orderTableView.getSelectionModel().getSelectedItem();
-            for (OrderItemDTO orderItemDTO : StartController.orderItemDTOList){
-                if (orderItemDTO.getMenuItemDTO().getName().equals(selectedItem.getItem())){
-                    if (orderItemDTO.getOrderAddonDTOList().size() == 0){
+            for (OrderItemDTO orderItemDTO : StartController.orderItemDTOList) {
+                if (orderItemDTO.getMenuItemDTO().getName().equals(selectedItem.getItem())) {
+                    if (orderItemDTO.getOrderAddonDTOList().size() == 0) {
                         OrderAddonDTO orderAddonDTO = new OrderAddonDTO(addon);
                         orderItemDTO.getOrderAddonDTOList().add(orderAddonDTO);
                     } else {
                         if (isOrderAddon(addon, orderItemDTO)) {
                             for (OrderAddonDTO orderAddonDTO : orderItemDTO.getOrderAddonDTOList()) {
-                                if (orderAddonDTO.getAddonDTO().getName().equals(addon.getName())){
+                                if (orderAddonDTO.getAddonDTO().getName().equals(addon.getName())) {
                                     orderAddonDTO.increaseTheQuantity();
                                     break;
                                 }
@@ -259,7 +247,8 @@ public class OrderController implements Initializable {
                     break;
                 }
             }
-            System.out.println(StartController.orderItemDTOList.toString());
+            loadMenuOrderData();
+            totalLabel.setText(String.format("Total: %.2f PLN", StartController.getTotalPrice()));
         });
         return button;
     }
@@ -297,7 +286,20 @@ public class OrderController implements Initializable {
     private void loadMenuOrderData() {
         Thread thread = new Thread(() -> {
             StartController.data.clear();
-            StartController.data.addAll(StartController.orderItemDTOList.stream().map(OrderTableModel::of).collect(Collectors.toList()));
+            List<OrderTableModel> orderTableModelList = new ArrayList<>();
+            StartController.orderItemDTOList
+                    .stream()
+                    .map(orderItemDTO -> {
+                        orderTableModelList.add(OrderTableModel.of(orderItemDTO));
+                        orderItemDTO.getOrderAddonDTOList()
+                                .stream()
+                                .map(addon -> {
+                                    orderTableModelList.add(OrderTableModel.of(addon));
+                                    return null;
+                                });
+                        return null;
+                    });
+            StartController.data.addAll(orderTableModelList);
         });
         thread.start();
     }

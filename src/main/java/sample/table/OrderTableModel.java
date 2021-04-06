@@ -1,6 +1,7 @@
 package sample.table;
 
 import javafx.beans.property.SimpleStringProperty;
+import sample.dto.OrderAddonDTO;
 import sample.dto.OrderItemDTO;
 
 public class OrderTableModel {
@@ -24,6 +25,12 @@ public class OrderTableModel {
         return new OrderTableModel(orderItemDTO.getMenuItemDTO().getName(),
                 orderItemDTO.getMenuItemDTO().getPrice(),
                 orderItemDTO.getAmount(), orderItemDTO.getDiscount());
+    }
+
+    public static OrderTableModel of(OrderAddonDTO orderAddonDTO){
+        return new OrderTableModel("- " + orderAddonDTO.getAddonDTO().getName(),
+                orderAddonDTO.getAddonDTO().getPrice(),
+                orderAddonDTO.getAmount(), 0.0);
     }
 
     public String getDiscount() {
