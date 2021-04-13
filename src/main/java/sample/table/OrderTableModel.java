@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import sample.dto.OrderAddonDTO;
 import sample.dto.OrderItemDTO;
 
-public class OrderTableModel {
+public class OrderTableModel{
 
     private final SimpleStringProperty item;
     private final SimpleStringProperty price;

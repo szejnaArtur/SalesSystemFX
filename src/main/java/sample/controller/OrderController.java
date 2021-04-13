@@ -224,8 +224,9 @@ public class OrderController implements Initializable {
         button.setOnMouseClicked(x -> button.setStyle(getHoverStyle()));
 
         button.setOnAction(x -> {
-
             OrderTableModel selectedItem = orderTableView.getSelectionModel().getSelectedItem();
+            int selectedIndex = orderTableView.getSelectionModel().getSelectedIndex();
+
             for (OrderItemDTO orderItemDTO : StartController.orderItemDTOList) {
                 if (orderItemDTO.getMenuItemDTO().getName().equals(selectedItem.getItem())) {
                     if (orderItemDTO.getOrderAddonDTOList().size() == 0) {
@@ -248,6 +249,7 @@ public class OrderController implements Initializable {
                 }
             }
             loadMenuOrderData();
+            orderTableView.getSelectionModel().select(selectedIndex);
             totalLabel.setText(String.format("Total: %.2f PLN", StartController.getTotalPrice()));
         });
         return button;
@@ -284,24 +286,15 @@ public class OrderController implements Initializable {
     }
 
     private void loadMenuOrderData() {
-        Thread thread = new Thread(() -> {
-            StartController.data.clear();
-            List<OrderTableModel> orderTableModelList = new ArrayList<>();
-            StartController.orderItemDTOList
-                    .stream()
-                    .map(orderItemDTO -> {
-                        orderTableModelList.add(OrderTableModel.of(orderItemDTO));
-                        orderItemDTO.getOrderAddonDTOList()
-                                .stream()
-                                .map(addon -> {
-                                    orderTableModelList.add(OrderTableModel.of(addon));
-                                    return null;
-                                });
-                        return null;
-                    });
-            StartController.data.addAll(orderTableModelList);
-        });
-        thread.start();
+        StartController.data.clear();
+        List<OrderTableModel> orderTableModelList = new ArrayList<>();
+        for (OrderItemDTO orderItemDTO : StartController.orderItemDTOList) {
+            orderTableModelList.add(OrderTableModel.of(orderItemDTO));
+            for (OrderAddonDTO orderAddonDTO : orderItemDTO.getOrderAddonDTOList()) {
+                orderTableModelList.add(OrderTableModel.of(orderAddonDTO));
+            }
+        }
+        StartController.data.addAll(orderTableModelList);
     }
 
     private void loadView() {

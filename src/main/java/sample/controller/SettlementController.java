@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sample.dto.OrderAddonDTO;
 import sample.dto.OrderItemDTO;
 import sample.factory.PopupFactory;
 import sample.rest.OrderItemRestClient;
@@ -19,6 +20,7 @@ import sample.table.OrderTableModel;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -508,13 +510,15 @@ public class SettlementController implements Initializable {
     }
 
     private void loadMenuOrderData() {
-        Thread thread = new Thread(() -> {
-            StartController.data.clear();
-            StartController.data.addAll(StartController.orderItemDTOList.stream()
-                    .map(OrderTableModel::of)
-                    .collect(Collectors.toList()));
-        });
-        thread.start();
+        StartController.data.clear();
+        List<OrderTableModel> orderTableModelList = new ArrayList<>();
+        for (OrderItemDTO orderItemDTO : StartController.orderItemDTOList) {
+            orderTableModelList.add(OrderTableModel.of(orderItemDTO));
+            for (OrderAddonDTO orderAddonDTO : orderItemDTO.getOrderAddonDTOList()) {
+                orderTableModelList.add(OrderTableModel.of(orderAddonDTO));
+            }
+        }
+        StartController.data.addAll(orderTableModelList);
     }
 
     private Stage getStage() {
