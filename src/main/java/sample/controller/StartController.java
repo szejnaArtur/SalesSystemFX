@@ -18,6 +18,7 @@ public class StartController {
 
     public static BillDTO bill;
     public static List<OrderItemDTO> orderItemDTOList;
+    public static List<OrderAddonDTO> orderAddonDTOList;
 
     public static ObservableList<OrderTableModel> data = FXCollections.observableArrayList();
 
@@ -25,7 +26,7 @@ public class StartController {
         double total = 0.0;
         for (OrderItemDTO orderItem : orderItemDTOList) {
             total += (orderItem.getAmount() * orderItem.getMenuItemDTO().getPrice()) - orderItem.getDiscount();
-            for (OrderAddonDTO orderAddon : orderItem.getOrderAddonDTOList()){
+            for (OrderAddonDTO orderAddon : StartController.orderAddonDTOList){
                 total += orderAddon.getAmount() * orderAddon.getAddonDTO().getPrice();
             }
         }

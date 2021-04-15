@@ -127,7 +127,7 @@ public class OrderController implements Initializable {
                 settlementStage.initStyle(StageStyle.UNDECORATED);
                 settlementStage.initModality(Modality.APPLICATION_MODAL);
                 try {
-                    Parent addAGCRaportParent = FXMLLoader.load(getClass().getResource(SETTLEMENT_FXML));
+                    Parent addAGCRaportParent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(SETTLEMENT_FXML)));
                     Scene scene = new Scene(addAGCRaportParent, 1920, 1080);
                     settlementStage.setScene(scene);
                     settlementStage.show();
@@ -229,20 +229,19 @@ public class OrderController implements Initializable {
 
             for (OrderItemDTO orderItemDTO : StartController.orderItemDTOList) {
                 if (orderItemDTO.getMenuItemDTO().getName().equals(selectedItem.getItem())) {
-                    if (orderItemDTO.getOrderAddonDTOList().size() == 0) {
-                        OrderAddonDTO orderAddonDTO = new OrderAddonDTO(addon);
-                        orderItemDTO.getOrderAddonDTOList().add(orderAddonDTO);
+                    if (StartController.orderAddonDTOList.size() == 0) {
+                        StartController.orderAddonDTOList.add(new OrderAddonDTO(addon, orderItemDTO));
                     } else {
-                        if (isOrderAddon(addon, orderItemDTO)) {
-                            for (OrderAddonDTO orderAddonDTO : orderItemDTO.getOrderAddonDTOList()) {
-                                if (orderAddonDTO.getAddonDTO().getName().equals(addon.getName())) {
-                                    orderAddonDTO.increaseTheQuantity();
-                                    break;
+                        if (isOrderAddon(addon, orderItemDTO)){
+                            for (OrderAddonDTO orderAddonDTO : StartController.orderAddonDTOList) {
+                                if (orderAddonDTO.getOrderItemDTO() == orderItemDTO) {
+                                    if (addon.getName().equals(orderAddonDTO.getAddonDTO().getName())) {
+                                        orderAddonDTO.increaseTheQuantity();
+                                    }
                                 }
                             }
                         } else {
-                            OrderAddonDTO orderAddonDTO = new OrderAddonDTO(addon);
-                            orderItemDTO.getOrderAddonDTOList().add(orderAddonDTO);
+                            StartController.orderAddonDTOList.add(new OrderAddonDTO(addon, orderItemDTO));
                         }
                     }
                     break;
@@ -253,6 +252,16 @@ public class OrderController implements Initializable {
             totalLabel.setText(String.format("Total: %.2f PLN", StartController.getTotalPrice()));
         });
         return button;
+    }
+
+    private boolean isOrderAddon(AddonDTO addonDTO, OrderItemDTO orderItemDTO) {
+        for (OrderAddonDTO orderAddon : StartController.orderAddonDTOList){
+            if (orderAddon.getOrderItemDTO().getMenuItemDTO().getName().equals(orderItemDTO.getMenuItemDTO().getName())
+            && orderAddon.getAddonDTO().getName().equals(addonDTO.getName())){
+                return true;
+            }
+        }
+        return false;
     }
 
     private void initializeOrderTableView() {
@@ -290,8 +299,10 @@ public class OrderController implements Initializable {
         List<OrderTableModel> orderTableModelList = new ArrayList<>();
         for (OrderItemDTO orderItemDTO : StartController.orderItemDTOList) {
             orderTableModelList.add(OrderTableModel.of(orderItemDTO));
-            for (OrderAddonDTO orderAddonDTO : orderItemDTO.getOrderAddonDTOList()) {
-                orderTableModelList.add(OrderTableModel.of(orderAddonDTO));
+            for (OrderAddonDTO orderAddonDTO : StartController.orderAddonDTOList) {
+                if (orderAddonDTO.getOrderItemDTO() == orderItemDTO) {
+                    orderTableModelList.add(OrderTableModel.of(orderAddonDTO));
+                }
             }
         }
         StartController.data.addAll(orderTableModelList);
@@ -299,7 +310,7 @@ public class OrderController implements Initializable {
 
     private void loadView() {
         try {
-            BorderPane borderPane = FXMLLoader.load(getClass().getResource(MENUITEM_FXML));
+            BorderPane borderPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(MENUITEM_FXML)));
             menuPane.getChildren().add(borderPane);
         } catch (IOException e) {
             e.printStackTrace();
@@ -340,15 +351,6 @@ public class OrderController implements Initializable {
     private Boolean isOrderItem(MenuItemDTO item) {
         for (OrderItemDTO dto : StartController.orderItemDTOList) {
             if (dto.getMenuItemDTO().getName().equals(item.getName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Boolean isOrderAddon(AddonDTO addon, OrderItemDTO orderItem) {
-        for (OrderAddonDTO dto : orderItem.getOrderAddonDTOList()) {
-            if (dto.getAddonDTO().getName().equals(addon.getName())) {
                 return true;
             }
         }

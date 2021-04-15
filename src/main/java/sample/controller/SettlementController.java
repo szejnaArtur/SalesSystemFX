@@ -15,6 +15,7 @@ import javafx.stage.StageStyle;
 import sample.dto.OrderAddonDTO;
 import sample.dto.OrderItemDTO;
 import sample.factory.PopupFactory;
+import sample.rest.OrderAddonRestClient;
 import sample.rest.OrderItemRestClient;
 import sample.table.OrderTableModel;
 
@@ -22,8 +23,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class SettlementController implements Initializable {
 
@@ -36,6 +37,7 @@ public class SettlementController implements Initializable {
 
     private final PopupFactory popupFactory;
     private final OrderItemRestClient orderItemRestClient;
+    private final OrderAddonRestClient orderAddonRestClient;
 
     @FXML
     private BorderPane settlementBorderPane;
@@ -139,6 +141,7 @@ public class SettlementController implements Initializable {
     public SettlementController() {
         this.popupFactory = new PopupFactory();
         this.orderItemRestClient = new OrderItemRestClient();
+        this.orderAddonRestClient = new OrderAddonRestClient();
     }
 
     @Override
@@ -181,7 +184,12 @@ public class SettlementController implements Initializable {
                 StartController.bill.setSodexoPaymentAmount(0.0);
                 StartController.bill.setPayUPaymentAmount(StartController.getTotalPrice());
 
-                orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
+                Thread saveOrderItemsAndOrderAddonsThread = new Thread(()->{
+                    orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
+                    orderAddonRestClient.saveOrderAddons(StartController.orderAddonDTOList);
+                });
+                saveOrderItemsAndOrderAddonsThread.start();
+
                 getStage().close();
                 openOtherStageAndCloseSettlementStage(RESTAURANT_PANEL_FXML);
             });
@@ -259,7 +267,7 @@ public class SettlementController implements Initializable {
                 Stage startPanelStage = new Stage();
                 startPanelStage.initStyle(StageStyle.UNDECORATED);
                 startPanelStage.initModality(Modality.APPLICATION_MODAL);
-                Parent startPanelRoot = FXMLLoader.load(getClass().getResource(TEXID_PANEL_FXML));
+                Parent startPanelRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(TEXID_PANEL_FXML)));
                 Scene scene = new Scene(startPanelRoot, 550, 850);
                 startPanelStage.setTitle(APP_TITLE);
                 startPanelStage.setScene(scene);
@@ -467,7 +475,7 @@ public class SettlementController implements Initializable {
     private void openOtherStageAndCloseSettlementStage(String FXML_NAME) {
         try {
             Stage startPanelStage = new Stage();
-            Parent startPanelRoot = FXMLLoader.load(getClass().getResource(FXML_NAME));
+            Parent startPanelRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXML_NAME)));
             Scene scene = new Scene(startPanelRoot, 1920, 1000);
             startPanelStage.setTitle(APP_TITLE);
             startPanelStage.setFullScreen(true);
@@ -514,8 +522,10 @@ public class SettlementController implements Initializable {
         List<OrderTableModel> orderTableModelList = new ArrayList<>();
         for (OrderItemDTO orderItemDTO : StartController.orderItemDTOList) {
             orderTableModelList.add(OrderTableModel.of(orderItemDTO));
-            for (OrderAddonDTO orderAddonDTO : orderItemDTO.getOrderAddonDTOList()) {
-                orderTableModelList.add(OrderTableModel.of(orderAddonDTO));
+            for (OrderAddonDTO orderAddonDTO : StartController.orderAddonDTOList) {
+                if (orderAddonDTO.getOrderItemDTO() == orderItemDTO) {
+                    orderTableModelList.add(OrderTableModel.of(orderAddonDTO));
+                }
             }
         }
         StartController.data.addAll(orderTableModelList);

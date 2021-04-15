@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class RestaurantPanelController implements Initializable {
@@ -58,7 +59,7 @@ public class RestaurantPanelController implements Initializable {
             Stage agcRaportStage = new Stage();
             agcRaportStage.initModality(Modality.APPLICATION_MODAL);
             try {
-                Parent addAGCRaportParent = FXMLLoader.load(getClass().getResource(AGC_RAPORT_FXML));
+                Parent addAGCRaportParent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(AGC_RAPORT_FXML)));
                 Scene scene = new Scene(addAGCRaportParent, 1280, 800);
                 agcRaportStage.setScene(scene);
                 agcRaportStage.show();
@@ -90,6 +91,7 @@ public class RestaurantPanelController implements Initializable {
             StartController.bill.setOrderDate(LocalDateTime.now());
             StartController.bill.setEmployeeDTO(StartController.employeeDTO);
             StartController.orderItemDTOList = new ArrayList<>();
+            StartController.orderAddonDTOList = new ArrayList<>();
             openAppCloseStage(ORDER_PANEL_FXML, getStage());
         });
     }
