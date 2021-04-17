@@ -186,7 +186,9 @@ public class SettlementController implements Initializable {
 
                 Thread saveOrderItemsAndOrderAddonsThread = new Thread(()->{
                     orderItemRestClient.saveOrderItems(StartController.orderItemDTOList);
-                    orderAddonRestClient.saveOrderAddons(StartController.orderAddonDTOList);
+                    if (StartController.orderAddonDTOList.size() != 0){
+                        orderAddonRestClient.saveOrderAddons(StartController.orderAddonDTOList);
+                    }
                 });
                 saveOrderItemsAndOrderAddonsThread.start();
 
